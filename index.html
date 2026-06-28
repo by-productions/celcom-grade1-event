@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>סיפור חדש מתחיל · הרשמה לאירוע כיתות א' · סלקום</title>
+<link rel="icon" type="image/png" href="assets/star.png">
+<link rel="apple-touch-icon" href="assets/star.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -56,14 +58,14 @@ body{
 @keyframes bob2{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(22px) rotate(var(--rot,0deg))}}
 @keyframes spinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
-.d-star-l{top:14%;left:6%;width:80px;animation:bob 7s ease-in-out infinite;--rot:-12deg}
+.d-star-l{top:13%;left:5%;width:122px;height:auto;animation:bob 7s ease-in-out infinite;--rot:-10deg}
 .d-pencil-l{bottom:8%;left:3%;width:130px;animation:bob2 8s ease-in-out infinite;--rot:38deg}
 .d-pencil-r{top:24%;right:5%;width:96px;animation:bob 6.5s ease-in-out infinite;--rot:-22deg}
 .d-mini1{top:40%;left:12%;width:30px;animation:twinkle 4s ease-in-out infinite}
 .d-mini2{top:70%;right:10%;width:24px;animation:twinkle 5s ease-in-out infinite .6s}
 .d-mini3{top:12%;right:24%;width:20px;animation:twinkle 3.5s ease-in-out infinite 1s}
 .d-dots{top:30%;left:4%;width:120px;opacity:.5;animation:bob 9s ease-in-out infinite}
-@media(max-width:880px){.d-pencil-r,.d-dots{display:none}.d-pencil-l{width:90px;opacity:.7}.d-star-l{width:54px}}
+@media(max-width:880px){.d-pencil-r,.d-dots{display:none}.d-pencil-l{width:90px;opacity:.7}.d-star-l{width:80px}}
 
 /* ============ HEADER ============ */
 .topbar{
@@ -327,7 +329,7 @@ body{
 
 <!-- ===== floating decoration ===== -->
 <div class="decor" aria-hidden="true">
-  <svg class="float d-star-l" viewBox="0 0 120 120"><use href="#starGlyph"/></svg>
+  <img class="float d-star-l" src="assets/star.png" alt="">
   <svg class="float d-pencil-l" viewBox="0 0 60 220"><use href="#pencilGlyph"/></svg>
   <svg class="float d-pencil-r" viewBox="0 0 60 220"><use href="#pencilGlyph"/></svg>
   <svg class="float d-mini1" viewBox="0 0 40 40"><path d="M20 2l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#FF1B9C"/></svg>
