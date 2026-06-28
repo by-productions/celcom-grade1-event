@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סיפור חדש מתחיל · הרשמה לאירוע כיתות א' · סלקום</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============ RESET & TOKENS ============ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-1:#F4ECFC;
+  --bg-2:#EBD9F8;
+  --bg-3:#E2CDF4;
+  --deep:#3A1670;
+  --deep-2:#4A1E8C;
+  --purple:#7B3FE4;
+  --purple-2:#8B3FF0;
+  --violet:#6322D6;
+  --pink:#FF1B9C;
+  --pink-2:#FF4DB4;
+  --magenta:#E6189C;
+  --white:#FFFFFF;
+  --ink:#3A1670;
+  --ink-soft:#6A4D9E;
+  --ring:rgba(123,63,228,.25);
+  --shadow-soft:0 18px 50px -16px rgba(74,30,140,.35);
+  --shadow-card:0 30px 80px -24px rgba(74,30,140,.45);
+  --grad-cta:linear-gradient(135deg,#FF1B9C 0%,#A93BE8 55%,#7B3FE4 100%);
+  --grad-pinkpurp:linear-gradient(180deg,#FF59C0 0%,#FF1B9C 40%,#9D34E2 100%);
+  --r-lg:34px;
+  --r-md:22px;
+  --r-sm:16px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Rubik',sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 700px at 85% -5%, #F7E6FF 0%, transparent 60%),
+    radial-gradient(1000px 800px at -10% 110%, #EAD7FB 0%, transparent 55%),
+    linear-gradient(165deg,var(--bg-1) 0%,var(--bg-2) 55%,var(--bg-3) 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.display{font-family:'Varela Round',sans-serif;letter-spacing:-.5px}
+
+/* ============ FLOATING DECOR LAYER ============ */
+.decor{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.float{position:absolute;will-change:transform}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-26px) rotate(var(--rot,0deg))}}
+@keyframes bob2{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(22px) rotate(var(--rot,0deg))}}
+@keyframes spinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+.d-star-l{top:14%;left:6%;width:80px;animation:bob 7s ease-in-out infinite;--rot:-12deg}
+.d-pencil-l{bottom:8%;left:3%;width:130px;animation:bob2 8s ease-in-out infinite;--rot:38deg}
+.d-pencil-r{top:24%;right:5%;width:96px;animation:bob 6.5s ease-in-out infinite;--rot:-22deg}
+.d-mini1{top:40%;left:12%;width:30px;animation:twinkle 4s ease-in-out infinite}
+.d-mini2{top:70%;right:10%;width:24px;animation:twinkle 5s ease-in-out infinite .6s}
+.d-mini3{top:12%;right:24%;width:20px;animation:twinkle 3.5s ease-in-out infinite 1s}
+.d-dots{top:30%;left:4%;width:120px;opacity:.5;animation:bob 9s ease-in-out infinite}
+@media(max-width:880px){.d-pencil-r,.d-dots{display:none}.d-pencil-l{width:90px;opacity:.7}.d-star-l{width:54px}}
+
+/* ============ HEADER ============ */
+.topbar{
+  position:relative;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px clamp(18px,5vw,54px);
+}
+.brand-logo{display:flex;align-items:center;text-decoration:none}
+.brand-logo img{height:clamp(48px,8vw,64px);width:auto;display:block}
+.org-tag{font-size:12.5px;color:var(--ink-soft);font-weight:600;text-align:left;line-height:1.35}
+@media(max-width:560px){.org-tag{display:none}}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;z-index:2;
+  max-width:1080px;margin:0 auto;
+  padding:18px clamp(18px,5vw,40px) 30px;
+  text-align:center;
+}
+.hero-stage{position:relative;display:inline-block;margin:6px auto 26px;max-width:760px}
+.blob{
+  position:absolute;inset:-6% -4% -10% -4%;
+  background:radial-gradient(120% 120% at 50% 35%,#4A1E8C 0%,#39146E 70%,#2D0F5C 100%);
+  border-radius:48% 52% 56% 44%/58% 56% 44% 42%;
+  filter:blur(.3px);
+  box-shadow:inset 0 8px 30px rgba(255,255,255,.08), 0 40px 90px -30px rgba(58,22,112,.6);
+  z-index:0;
+}
+.hero-title{position:relative;z-index:2;padding:30px 16px}
+.line{display:block;line-height:.96}
+.l1{font-size:clamp(40px,9vw,86px);color:#fff;text-shadow:0 6px 0 rgba(58,22,112,.55),0 14px 26px rgba(0,0,0,.25)}
+.l2{
+  font-size:clamp(58px,13vw,128px);
+  background:var(--grad-pinkpurp);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 7px 0 rgba(58,22,112,.5)) drop-shadow(0 16px 22px rgba(230,24,156,.35));
+  margin:-6px 0;
+}
+.l3{font-size:clamp(40px,9vw,86px);color:#fff;text-shadow:0 6px 0 rgba(58,22,112,.55),0 14px 26px rgba(0,0,0,.25)}
+.hero-mascot{
+  position:absolute;z-index:3;left:-86px;top:50%;transform:translateY(-50%);
+  width:200px;animation:bob 6s ease-in-out infinite;--rot:0deg;
+}
+@media(max-width:760px){.hero-mascot{width:120px;left:-30px}}
+@media(max-width:520px){.hero-mascot{display:none}}
+
+.hero-sub{
+  position:relative;z-index:2;
+  font-size:clamp(16px,2.4vw,20px);font-weight:600;color:var(--ink-soft);
+  max-width:560px;margin:0 auto 22px;line-height:1.6;
+}
+.event-chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+.chip{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.75);backdrop-filter:blur(8px);
+  border:1.5px solid rgba(123,63,228,.18);
+  padding:11px 20px;border-radius:50px;
+  font-weight:700;font-size:15px;color:var(--ink);
+  box-shadow:0 10px 26px -12px rgba(74,30,140,.4);
+}
+.chip svg{width:19px;height:19px;flex-shrink:0}
+.cta-hero{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:'Varela Round',sans-serif;font-size:21px;
+  color:#fff;background:var(--grad-cta);
+  padding:18px 40px;border:none;border-radius:50px;cursor:pointer;
+  box-shadow:0 18px 40px -10px rgba(230,24,156,.55),inset 0 2px 0 rgba(255,255,255,.35);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;
+}
+.cta-hero:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 26px 50px -10px rgba(230,24,156,.6),inset 0 2px 0 rgba(255,255,255,.4)}
+.cta-hero:active{transform:translateY(-1px) scale(1)}
+.cta-hero svg{width:22px;height:22px;transition:transform .3s}
+.cta-hero:hover svg{transform:translateX(-6px)}
+
+/* ============ INTRO LETTER ============ */
+.intro{
+  position:relative;z-index:2;
+  max-width:760px;margin:10px auto 56px;
+  padding:clamp(26px,5vw,46px);
+  background:rgba(255,255,255,.78);backdrop-filter:blur(10px);
+  border-radius:var(--r-lg);
+  border:1.5px solid rgba(255,255,255,.9);
+  box-shadow:var(--shadow-card);
+}
+.intro::before{
+  content:"";position:absolute;inset:0;border-radius:var(--r-lg);padding:2px;
+  background:linear-gradient(135deg,rgba(255,27,156,.5),rgba(123,63,228,.4),transparent 70%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.intro h2{font-family:'Varela Round',sans-serif;font-size:clamp(22px,4vw,30px);color:var(--violet);margin-bottom:16px}
+.intro p{font-size:clamp(15px,2vw,17.5px);line-height:1.85;color:#4a3a6e;margin-bottom:14px}
+.intro p:last-child{margin-bottom:0}
+.intro strong{color:var(--magenta)}
+
+/* ============ FORM SECTION ============ */
+.form-wrap{position:relative;z-index:2;max-width:760px;margin:0 auto 70px;padding:0 clamp(14px,4vw,20px)}
+.form-card{
+  position:relative;
+  background:#fff;border-radius:var(--r-lg);
+  box-shadow:var(--shadow-card);
+  overflow:hidden;
+}
+
+/* progress path */
+.progress{padding:28px clamp(20px,5vw,40px) 8px;position:relative}
+.steps{display:flex;align-items:flex-start;justify-content:space-between;position:relative;max-width:560px;margin:0 auto}
+.track{
+  position:absolute;top:23px;right:9%;left:9%;height:4px;
+  background:repeating-linear-gradient(90deg,#E0D2F5 0 8px,transparent 8px 16px);
+  border-radius:4px;z-index:0;
+}
+.track-fill{
+  position:absolute;top:23px;right:9%;height:4px;
+  background:var(--grad-cta);border-radius:4px;z-index:1;
+  width:0;transition:width .5s cubic-bezier(.65,0,.35,1);
+}
+.step{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+.dot{
+  width:48px;height:48px;border-radius:50%;
+  background:#F1E9FB;border:3px solid #E0D2F5;
+  display:grid;place-items:center;
+  font-family:'Varela Round',sans-serif;font-size:19px;color:#B7A3DC;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.step.active .dot{background:var(--grad-cta);border-color:transparent;color:#fff;box-shadow:0 10px 22px -6px rgba(230,24,156,.6);transform:scale(1.08)}
+.step.done .dot{background:var(--purple);border-color:transparent;color:#fff}
+.step-name{font-size:12.5px;font-weight:700;color:#B7A3DC;text-align:center;transition:color .3s}
+.step.active .step-name,.step.done .step-name{color:var(--violet)}
+@media(max-width:560px){.step-name{display:none}.dot{width:42px;height:42px;font-size:17px}.track,.track-fill{top:20px}}
+
+/* panels */
+.panels{padding:8px clamp(22px,5vw,46px) 0}
+.panel{display:none;animation:fadeUp .5s ease both}
+.panel.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.panel-head{text-align:center;margin-bottom:24px}
+.eyebrow{
+  display:inline-block;font-weight:800;font-size:12.5px;letter-spacing:.5px;
+  color:var(--magenta);background:rgba(255,27,156,.1);
+  padding:6px 16px;border-radius:50px;margin-bottom:10px;
+}
+.panel-head h3{font-family:'Varela Round',sans-serif;font-size:clamp(24px,4.5vw,32px);color:var(--violet)}
+.panel-head p{color:var(--ink-soft);font-size:15px;margin-top:6px}
+
+/* fields */
+.field{margin-bottom:20px}
+.field label{display:block;font-weight:700;font-size:15px;color:var(--ink);margin-bottom:9px}
+.field label .req{color:var(--pink)}
+.field .hint{font-weight:500;font-size:12.5px;color:var(--ink-soft);margin-right:4px}
+.input,.textarea{
+  width:100%;font-family:'Rubik',sans-serif;font-size:16px;color:var(--ink);
+  background:#FAF6FE;border:2px solid #ECE0F8;border-radius:var(--r-sm);
+  padding:15px 18px;transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.input::placeholder,.textarea::placeholder{color:#B7A3DC}
+.input:focus,.textarea:focus{outline:none;border-color:var(--purple);background:#fff;box-shadow:0 0 0 4px var(--ring)}
+.textarea{resize:vertical;min-height:120px;line-height:1.6}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:520px){.row2{grid-template-columns:1fr}}
+.counter{text-align:left;font-size:12px;color:#B7A3DC;margin-top:6px}
+
+/* photo upload */
+.photo-up{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.photo-frame{
+  width:118px;height:118px;flex-shrink:0;border-radius:30px;
+  background:#FAF6FE;border:3px dashed #D9C6F2;
+  display:grid;place-items:center;overflow:hidden;position:relative;
+  transition:border-color .2s,transform .2s;
+}
+.photo-frame.has-img{border-style:solid;border-color:var(--purple)}
+.photo-frame img{width:100%;height:100%;object-fit:cover}
+.photo-frame .ph-ico{color:#C9B5EC}
+.photo-frame.drag{border-color:var(--pink);transform:scale(1.03)}
+.up-actions{flex:1;min-width:180px}
+.up-btn{
+  display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  font-weight:700;font-size:15px;color:var(--violet);
+  background:#F3EBFC;border:2px solid #E3D2F7;border-radius:50px;
+  padding:12px 22px;transition:all .2s;
+}
+.up-btn:hover{background:#EADBFA;border-color:var(--purple)}
+.up-btn svg{width:18px;height:18px}
+.up-note{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5}
+.remove-photo{display:none;margin-top:8px;background:none;border:none;color:var(--pink);font-weight:700;font-size:13px;cursor:pointer;font-family:'Rubik'}
+.remove-photo.show{display:inline-block}
+
+/* strengths chips */
+.chips-pick{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.pick{
+  cursor:pointer;user-select:none;
+  font-weight:700;font-size:14px;color:var(--ink-soft);
+  background:#FAF6FE;border:2px solid #ECE0F8;border-radius:50px;
+  padding:10px 18px;transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.pick:hover{border-color:var(--purple);color:var(--violet)}
+.pick.on{background:var(--grad-cta);border-color:transparent;color:#fff;box-shadow:0 8px 18px -6px rgba(230,24,156,.5);transform:translateY(-2px)}
+
+/* nav buttons */
+.panel-nav{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:26px 0 34px}
+.btn{
+  font-family:'Varela Round',sans-serif;font-size:17px;cursor:pointer;border:none;
+  padding:15px 32px;border-radius:50px;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,background .2s;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.btn svg{width:19px;height:19px}
+.btn-next{color:#fff;background:var(--grad-cta);box-shadow:0 14px 30px -10px rgba(230,24,156,.5),inset 0 2px 0 rgba(255,255,255,.3)}
+.btn-next:hover{transform:translateY(-3px);box-shadow:0 20px 38px -10px rgba(230,24,156,.6),inset 0 2px 0 rgba(255,255,255,.4)}
+.btn-back{color:var(--violet);background:#F3EBFC}
+.btn-back:hover{background:#EADBFA;transform:translateY(-2px)}
+.btn-back svg{transform:scaleX(-1)}
+.btn-next svg{transform:scaleX(-1)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none}
+
+/* error */
+.err{color:var(--pink);font-size:13px;font-weight:600;margin-top:7px;display:none}
+.err.show{display:block;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.input.invalid,.textarea.invalid,.photo-frame.invalid{border-color:var(--pink)}
+
+/* ============ SUCCESS ============ */
+.success{display:none;text-align:center;padding:54px clamp(22px,5vw,46px) 60px}
+.success.show{display:block;animation:fadeUp .6s ease both}
+.success .star-pop{width:120px;margin:0 auto 22px;animation:pop .7s cubic-bezier(.34,1.8,.5,1) both}
+@keyframes pop{from{transform:scale(0) rotate(-25deg)}to{transform:scale(1) rotate(0)}}
+.success h3{font-family:'Varela Round',sans-serif;font-size:clamp(28px,5vw,40px);color:var(--violet);margin-bottom:14px}
+.success p{color:var(--ink-soft);font-size:16.5px;line-height:1.7;max-width:440px;margin:0 auto 8px}
+.success .kid-name{color:var(--magenta);font-weight:800}
+.success-card{
+  margin:30px auto 0;max-width:380px;
+  background:linear-gradient(160deg,#FBF3FF,#F3E6FC);
+  border:2px solid rgba(123,63,228,.18);border-radius:var(--r-md);
+  padding:24px;text-align:right;box-shadow:var(--shadow-soft);
+}
+.success-card .sc-photo{width:74px;height:74px;border-radius:20px;object-fit:cover;float:left;margin-right:16px;border:2px solid var(--purple)}
+.success-card h4{font-family:'Varela Round';color:var(--violet);font-size:20px;margin-bottom:6px}
+.success-card .sc-line{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin-top:8px;clear:none}
+
+/* confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+.conf{position:absolute;width:11px;height:18px;border-radius:3px;opacity:0}
+@keyframes fall{0%{opacity:1;transform:translateY(-10vh) rotate(0)}100%{opacity:0;transform:translateY(110vh) rotate(720deg)}}
+
+/* footer */
+.foot{position:relative;z-index:2;text-align:center;padding:10px 20px 40px;color:var(--ink-soft);font-size:13.5px;font-weight:500}
+.foot strong{color:var(--violet)}
+
+/* ============ MOUSE TRAIL (drawn dashed line) ============ */
+.trail-layer{position:fixed;inset:0;pointer-events:none;z-index:90;width:100%;height:100%}
+
+/* a11y */
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px;border-radius:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<!-- ===== floating decoration ===== -->
+<div class="decor" aria-hidden="true">
+  <svg class="float d-star-l" viewBox="0 0 120 120"><use href="#starGlyph"/></svg>
+  <svg class="float d-pencil-l" viewBox="0 0 60 220"><use href="#pencilGlyph"/></svg>
+  <svg class="float d-pencil-r" viewBox="0 0 60 220"><use href="#pencilGlyph"/></svg>
+  <svg class="float d-mini1" viewBox="0 0 40 40"><path d="M20 2l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#FF1B9C"/></svg>
+  <svg class="float d-mini2" viewBox="0 0 40 40"><path d="M20 2l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#7B3FE4"/></svg>
+  <svg class="float d-mini3" viewBox="0 0 40 40"><path d="M20 2l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#FF4DB4"/></svg>
+  <svg class="float d-dots" viewBox="0 0 120 80">
+    <g fill="#7B3FE4"><circle cx="6" cy="8" r="3.4"/><circle cx="26" cy="8" r="3.4"/><circle cx="46" cy="8" r="3.4"/><circle cx="6" cy="28" r="3.4"/><circle cx="26" cy="28" r="3.4"/><circle cx="46" cy="28" r="3.4"/><circle cx="6" cy="48" r="3.4"/><circle cx="26" cy="48" r="3.4"/><circle cx="6" cy="68" r="3.4"/></g>
+  </svg>
+</div>
+
+<!-- ===== SVG defs (reusable 3D glyphs) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="starGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9B57F2"/><stop offset="1" stop-color="#6322D6"/>
+    </linearGradient>
+    <radialGradient id="starHi" cx="35%" cy="28%" r="60%">
+      <stop offset="0" stop-color="#C39BFF" stop-opacity=".9"/><stop offset="1" stop-color="#C39BFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9B57F2"/><stop offset="1" stop-color="#6F2DD8"/>
+    </linearGradient>
+
+    <g id="starGlyph">
+      <path d="M60 6c4 0 7 4 9 9l9 22 24 2c6 1 9 4 10 8s-2 8-6 12l-18 16 6 24c1 6-1 10-5 12s-8 1-13-2l-21-13-21 13c-5 3-9 4-13 2s-6-6-5-12l6-24-18-16c-4-4-7-8-6-12s4-7 10-8l24-2 9-22c2-5 5-9 9-9z" fill="url(#starGrad)" stroke="#4A1E8C" stroke-width="3"/>
+      <ellipse cx="48" cy="44" rx="26" ry="20" fill="url(#starHi)"/>
+      <path d="M44 56q5 6 11 0" fill="none" stroke="#2D0F5C" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M68 56q5 6 11 0" fill="none" stroke="#2D0F5C" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M50 70q12 11 24 0" fill="none" stroke="#2D0F5C" stroke-width="4.5" stroke-linecap="round"/>
+    </g>
+
+    <g id="pencilGlyph">
+      <rect x="14" y="6" width="32" height="20" rx="8" fill="#FF1B9C"/>
+      <rect x="14" y="24" width="32" height="12" fill="#F0EAF7"/>
+      <rect x="14" y="34" width="32" height="140" fill="url(#pencilBody)"/>
+      <rect x="20" y="34" width="6" height="140" fill="#B989FF" opacity=".55"/>
+      <path d="M14 174 L30 212 L46 174 Z" fill="#F4C98A"/>
+      <path d="M22 192 L30 212 L38 192 Z" fill="#2D0F5C"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ===== top bar ===== -->
+<header class="topbar">
+  <a class="brand-logo" href="#" aria-label="סיפור חדש מתחיל">
+    <img src="assets/logo.png" alt="סיפור חדש מתחיל · סלקום">
+  </a>
+  <div class="org-tag">ארגון עובדי<br>קבוצת סלקום</div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-stage">
+    <div class="blob"></div>
+    <svg class="hero-mascot" viewBox="0 0 120 120"><use href="#starGlyph"/></svg>
+    <div class="hero-title">
+      <span class="line l1 display">סיפור</span>
+      <span class="line l2 display">חדש</span>
+      <span class="line l3 display">מתחיל</span>
+    </div>
+  </div>
+
+  <p class="hero-sub">חוגגים את הילדים שלנו שעולים לכיתה א'.<br>בואו נכתוב יחד את הפרק הראשון בסיפור שלהם.</p>
+
+  <div class="event-chips">
+    <span class="chip">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="3" stroke="#7B3FE4" stroke-width="2"/><path d="M3 9h18M8 3v4M16 3v4" stroke="#FF1B9C" stroke-width="2" stroke-linecap="round"/></svg>
+      28 ביולי
+    </span>
+    <span class="chip">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z" stroke="#7B3FE4" stroke-width="2"/><circle cx="12" cy="9" r="2.5" fill="#FF1B9C"/></svg>
+      בריכת כפר מעש
+    </span>
+    <span class="chip">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z" stroke="#7B3FE4" stroke-width="2" stroke-linejoin="round"/></svg>
+      ילדי כיתות א'
+    </span>
+  </div>
+
+  <button class="cta-hero display" onclick="document.getElementById('formTop').scrollIntoView()">
+    בואו נתחיל לכתוב
+    <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</section>
+
+<!-- ===== intro letter ===== -->
+<section class="intro">
+  <h2 class="display">משפחת סלקום ❤️</h2>
+  <p>אנחנו רגילים לחבר בין אנשים, אבל הפעם אנחנו חוגגים חיבור מסוג אחר – החיבור של הילדים שלנו לעולם חדש של למידה, חברים, חוויות וגילויים.</p>
+  <p>המעבר לכיתה א' הוא רגע משמעותי ומרגש. רגע שבו כל ילד מתחיל לכתוב <strong>פרק חדש</strong> בסיפור החיים שלו.</p>
+  <p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך החדשה.</p>
+</section>
+
+<!-- ===== FORM ===== -->
+<div id="formTop"></div>
+<section class="form-wrap">
+  <div class="form-card">
+
+    <!-- progress -->
+    <div class="progress">
+      <div class="steps">
+        <div class="track"></div>
+        <div class="track-fill" id="trackFill"></div>
+        <div class="step active" data-step="0"><div class="dot">1</div><div class="step-name">הגיבור/ה שלנו</div></div>
+        <div class="step" data-step="1"><div class="dot">2</div><div class="step-name">הברכה שלנו</div></div>
+        <div class="step" data-step="2"><div class="dot">3</div><div class="step-name">כוחות וחלומות</div></div>
+        <div class="step" data-step="3"><div class="dot">4</div><div class="step-name">פרטי קשר</div></div>
+      </div>
+    </div>
+
+    <div class="panels">
+
+      <!-- PANEL 1 -->
+      <div class="panel show" data-panel="0">
+        <div class="panel-head">
+          <span class="eyebrow">פרק ראשון</span>
+          <h3 class="display">מי הגיבור/ה של הסיפור?</h3>
+          <p>נכיר את הילד/ה שעומדים לכתוב פרק חדש</p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="fname">שם פרטי <span class="req">*</span></label>
+            <input class="input" id="fname" type="text" placeholder="לדוגמה: יהלי" autocomplete="off">
+            <div class="err" data-err="fname">נשמח לדעת איך קוראים לגיבור/ה</div>
+          </div>
+          <div class="field">
+            <label for="lname">שם משפחה <span class="req">*</span></label>
+            <input class="input" id="lname" type="text" placeholder="לדוגמה: לוי" autocomplete="off">
+            <div class="err" data-err="lname">חסר שם משפחה</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>תמונה של הילד/ה <span class="req">*</span> <span class="hint">· תשמש ליצירת המזכרת האישית</span></label>
+          <div class="photo-up">
+            <div class="photo-frame" id="photoFrame">
+              <svg class="ph-ico" width="44" height="44" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="2"/><path d="M8 6l1.5-2h5L16 6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <img id="photoPreview" alt="" style="display:none">
+            </div>
+            <div class="up-actions">
+              <label class="up-btn" for="photoInput">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4M7 9l5-5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 16v3a1 1 0 001 1h12a1 1 0 001-1v-3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                העלאת תמונה
+              </label>
+              <input type="file" id="photoInput" accept="image/*" hidden>
+              <p class="up-note">אפשר לגרור תמונה לתוך המסגרת · JPG / PNG עד 8MB</p>
+              <button class="remove-photo" id="removePhoto" type="button">הסרת התמונה</button>
+              <div class="err" data-err="photo">עדיין לא הוספתם תמונה</div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-nav">
+          <span></span>
+          <button class="btn btn-next" data-next>הפרק הבא <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- PANEL 2 -->
+      <div class="panel" data-panel="1">
+        <div class="panel-head">
+          <span class="eyebrow">פרק שני</span>
+          <h3 class="display">הברכה שלכם מהלב</h3>
+          <p>הברכה הזו תודפס על קלף ותצורף למזכרת האישית באירוע</p>
+        </div>
+        <div class="field">
+          <label for="blessing">ברכה אישית מההורים <span class="req">*</span></label>
+          <textarea class="textarea" id="blessing" maxlength="500" placeholder="כתבו כמה מילים מרגשות שתרצו שילוו את הילד/ה בדרך החדשה..." style="min-height:160px"></textarea>
+          <div class="counter"><span id="blessCount">0</span>/500</div>
+          <div class="err" data-err="blessing">נשמח לכמה מילים מהלב (לפחות 10 תווים)</div>
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-back" data-back><svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> חזרה</button>
+          <button class="btn btn-next" data-next>הפרק הבא <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- PANEL 3 -->
+      <div class="panel" data-panel="2">
+        <div class="panel-head">
+          <span class="eyebrow">פרק שלישי</span>
+          <h3 class="display">הכוחות והחלומות</h3>
+          <p>מה מיוחד בילד/ה ולאן הם חולמים להגיע</p>
+        </div>
+        <div class="field">
+          <label>חוזקות בולטות <span class="req">*</span> <span class="hint">· בחרו מהרשימה או הוסיפו משלכם</span></label>
+          <div class="chips-pick" id="strengthChips">
+            <span class="pick" data-val="יצירתי/ת">יצירתי/ת</span>
+            <span class="pick" data-val="סקרן/ית">סקרן/ית</span>
+            <span class="pick" data-val="אמיץ/ה">אמיץ/ה</span>
+            <span class="pick" data-val="חברותי/ת">חברותי/ת</span>
+            <span class="pick" data-val="רגיש/ה">רגיש/ה</span>
+            <span class="pick" data-val="ספורטיבי/ת">ספורטיבי/ת</span>
+            <span class="pick" data-val="מצחיק/ה">מצחיק/ה</span>
+            <span class="pick" data-val="נדיב/ה">נדיב/ה</span>
+            <span class="pick" data-val="חרוץ/ה">חרוץ/ה</span>
+            <span class="pick" data-val="מנהיג/ה">מנהיג/ה</span>
+            <span class="pick" data-val="סבלני/ת">סבלני/ת</span>
+            <span class="pick" data-val="אמן/ית">אמן/ית</span>
+          </div>
+          <input class="input" id="strengthsExtra" type="text" placeholder="עוד חוזקה שתרצו להוסיף? (לא חובה)" style="margin-top:6px">
+          <div class="err" data-err="strengths">בחרו לפחות חוזקה אחת</div>
+        </div>
+        <div class="field">
+          <label for="dreams">חלומות, שאיפות ומה תאחלו לקראת כיתה א' <span class="req">*</span></label>
+          <textarea class="textarea" id="dreams" maxlength="400" placeholder="על מה הם חולמים? מה תרצו שילווה אותם בשנה הראשונה בבית הספר?"></textarea>
+          <div class="counter"><span id="dreamCount">0</span>/400</div>
+          <div class="err" data-err="dreams">נשמח לשמוע על החלומות (לפחות 10 תווים)</div>
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-back" data-back><svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> חזרה</button>
+          <button class="btn btn-next" data-next>הפרק הבא <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- PANEL 4 -->
+      <div class="panel" data-panel="3">
+        <div class="panel-head">
+          <span class="eyebrow">פרק אחרון</span>
+          <h3 class="display">נשארים בקשר</h3>
+          <p>פרטי ההורה — כדי שנוכל לעדכן אתכם לקראת האירוע</p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="parent">שם ההורה <span class="req">*</span></label>
+            <input class="input" id="parent" type="text" placeholder="שם מלא" autocomplete="name">
+            <div class="err" data-err="parent">חסר שם ההורה</div>
+          </div>
+          <div class="field">
+            <label for="phone">טלפון נייד <span class="req">*</span></label>
+            <input class="input" id="phone" type="tel" placeholder="050-0000000" inputmode="tel" autocomplete="tel">
+            <div class="err" data-err="phone">מספר טלפון לא תקין</div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">דוא"ל <span class="req">*</span></label>
+          <input class="input" id="email" type="email" placeholder="name@example.com" inputmode="email" autocomplete="email">
+          <div class="err" data-err="email">כתובת אימייל לא תקינה</div>
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-back" data-back><svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> חזרה</button>
+          <button class="btn btn-next" id="submitBtn">סיימנו! שלחו את הסיפור ✨</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success" id="successScreen">
+      <svg class="star-pop" viewBox="0 0 120 120"><use href="#starGlyph"/></svg>
+      <h3 class="display">הסיפור נשלח בהצלחה!</h3>
+      <p>תודה שכתבתם איתנו את הפרק הראשון בסיפור של <span class="kid-name" id="successName">הילד/ה</span>.<br>נתראה ב-28 ביולי בבריכת כפר מעש לחגיגה גדולה 🎉</p>
+      <div class="success-card" id="successCard">
+        <img class="sc-photo" id="scPhoto" alt="">
+        <h4 id="scName">—</h4>
+        <div class="sc-line" id="scStrengths"></div>
+        <div class="sc-line" id="scBless"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<canvas class="trail-layer" id="trailCanvas" aria-hidden="true"></canvas>
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<footer class="foot">
+  אירוע ילדי כיתות א' · <strong>ארגון עובדי קבוצת סלקום</strong> · סיפור חדש מתחיל
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     ▼▼▼  הגדרות חיבור ל-GOOGLE SHEETS + DRIVE  ▼▼▼
+     אחרי שתפרסמי את ה-Apple Script (ראי קובץ ההוראות),
+     הדביקי כאן את הכתובת שתקבלי (מסתיימת ב-/exec):
+  ========================================================= */
+  const CONFIG = {
+    SCRIPT_URL: "PASTE_YOUR_APPS_SCRIPT_URL_HERE"
+  };
+  /* ========================================================= */
+
+  const panels=[...document.querySelectorAll('.panel')];
+  const steps=[...document.querySelectorAll('.step')];
+  const trackFill=document.getElementById('trackFill');
+  let cur=0;
+  const total=panels.length;
+
+  /* ---- progress render ---- */
+  function render(){
+    panels.forEach((p,i)=>p.classList.toggle('show',i===cur));
+    steps.forEach((s,i)=>{
+      s.classList.toggle('active',i===cur);
+      s.classList.toggle('done',i<cur);
+    });
+    trackFill.style.width=(cur/(total-1)* (100-18))+'%'; /* track is inset 9% each side */
+  }
+
+  /* ---- field helpers ---- */
+  function showErr(name,on){
+    const e=document.querySelector('[data-err="'+name+'"]');
+    if(e) e.classList.toggle('show',on);
+  }
+  function markInvalid(el,on){ if(el) el.classList.toggle('invalid',on); }
+
+  /* ---- validators per panel ---- */
+  function validate(idx){
+    let ok=true;
+    if(idx===0){
+      const f=document.getElementById('fname'),l=document.getElementById('lname');
+      if(!f.value.trim()){showErr('fname',true);markInvalid(f,true);ok=false}else{showErr('fname',false);markInvalid(f,false)}
+      if(!l.value.trim()){showErr('lname',true);markInvalid(l,true);ok=false}else{showErr('lname',false);markInvalid(l,false)}
+      const hasPhoto=document.getElementById('photoPreview').src && document.getElementById('photoPreview').style.display!=='none';
+      const frame=document.getElementById('photoFrame');
+      if(!hasPhoto){showErr('photo',true);markInvalid(frame,true);ok=false}else{showErr('photo',false);markInvalid(frame,false)}
+    }
+    if(idx===1){
+      const b=document.getElementById('blessing');
+      if(b.value.trim().length<10){showErr('blessing',true);markInvalid(b,true);ok=false}else{showErr('blessing',false);markInvalid(b,false)}
+    }
+    if(idx===2){
+      const picked=document.querySelectorAll('.pick.on').length;
+      const extra=document.getElementById('strengthsExtra').value.trim();
+      if(picked===0 && !extra){showErr('strengths',true);ok=false}else{showErr('strengths',false)}
+      const d=document.getElementById('dreams');
+      if(d.value.trim().length<10){showErr('dreams',true);markInvalid(d,true);ok=false}else{showErr('dreams',false);markInvalid(d,false)}
+    }
+    if(idx===3){
+      const p=document.getElementById('parent'),ph=document.getElementById('phone'),em=document.getElementById('email');
+      if(!p.value.trim()){showErr('parent',true);markInvalid(p,true);ok=false}else{showErr('parent',false);markInvalid(p,false)}
+      const phoneOk=/^0\d{1,2}[-\s]?\d{7}$/.test(ph.value.replace(/\s/g,''));
+      if(!phoneOk){showErr('phone',true);markInvalid(ph,true);ok=false}else{showErr('phone',false);markInvalid(ph,false)}
+      const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value.trim());
+      if(!emailOk){showErr('email',true);markInvalid(em,true);ok=false}else{showErr('email',false);markInvalid(em,false)}
+    }
+    return ok;
+  }
+
+  /* ---- navigation ---- */
+  document.querySelectorAll('[data-next]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(btn.id==='submitBtn'){ if(validate(cur)) submitForm(); return; }
+      if(validate(cur)){ cur=Math.min(cur+1,total-1); render(); scrollForm(); }
+    });
+  });
+  document.querySelectorAll('[data-back]').forEach(btn=>{
+    btn.addEventListener('click',()=>{ cur=Math.max(cur-1,0); render(); scrollForm(); });
+  });
+  function scrollForm(){ document.getElementById('formTop').scrollIntoView({behavior:'smooth'}); }
+
+  /* ---- live counters & clear-on-type ---- */
+  const bind=(id,countId)=>{
+    const el=document.getElementById(id);
+    el.addEventListener('input',()=>{ if(countId) document.getElementById(countId).textContent=el.value.length; el.classList.remove('invalid'); });
+  };
+  bind('blessing','blessCount'); bind('dreams','dreamCount');
+  ['fname','lname','parent','phone','email','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
+
+  /* ---- strengths chips ---- */
+  document.querySelectorAll('.pick').forEach(c=>{
+    c.addEventListener('click',()=>{ c.classList.toggle('on'); showErr('strengths',false); });
+  });
+
+  /* ---- photo upload ---- */
+  const input=document.getElementById('photoInput');
+  const frame=document.getElementById('photoFrame');
+  const preview=document.getElementById('photoPreview');
+  const removeBtn=document.getElementById('removePhoto');
+  function loadFile(file){
+    if(!file||!file.type.startsWith('image/'))return;
+    if(file.size>8*1024*1024){ showErr('photo',true); document.querySelector('[data-err="photo"]').textContent='התמונה גדולה מ-8MB'; return; }
+    const r=new FileReader();
+    r.onload=e=>{ preview.src=e.target.result; preview.style.display='block'; frame.classList.add('has-img'); frame.classList.remove('invalid'); removeBtn.classList.add('show'); showErr('photo',false); };
+    r.readAsDataURL(file);
+  }
+  input.addEventListener('change',e=>loadFile(e.target.files[0]));
+  removeBtn.addEventListener('click',()=>{ preview.src=''; preview.style.display='none'; frame.classList.remove('has-img'); removeBtn.classList.remove('show'); input.value=''; });
+  ['dragenter','dragover'].forEach(ev=>frame.addEventListener(ev,e=>{e.preventDefault();frame.classList.add('drag')}));
+  ['dragleave','drop'].forEach(ev=>frame.addEventListener(ev,e=>{e.preventDefault();frame.classList.remove('drag')}));
+  frame.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+  frame.addEventListener('click',()=>input.click());
+
+  /* ---- submit / success ---- */
+  async function submitForm(){
+    const fname=document.getElementById('fname').value.trim();
+    const lname=document.getElementById('lname').value.trim();
+    const strengths=[...document.querySelectorAll('.pick.on')].map(c=>c.dataset.val);
+    const extra=document.getElementById('strengthsExtra').value.trim();
+    if(extra) strengths.push(extra);
+    const bless=document.getElementById('blessing').value.trim();
+    const dreams=document.getElementById('dreams').value.trim();
+    const parent=document.getElementById('parent').value.trim();
+    const phone=document.getElementById('phone').value.trim();
+    const email=document.getElementById('email').value.trim();
+
+    const payload={
+      fname, lname,
+      strengths: strengths.join(' · '),
+      blessing: bless,
+      dreams,
+      parent, phone, email,
+      photoData: preview.src || '',
+      photoName: (fname+'_'+lname).replace(/\s+/g,'-')
+    };
+
+    /* loading state on the submit button */
+    const btn=document.getElementById('submitBtn');
+    const originalLabel=btn.textContent;
+    btn.disabled=true; btn.textContent='שולח... ✨';
+
+    /* === send to Google Sheets + Drive (via Apps Script) === */
+    try{
+      if(CONFIG.SCRIPT_URL && CONFIG.SCRIPT_URL.indexOf('PASTE_YOUR')===-1){
+        await fetch(CONFIG.SCRIPT_URL,{
+          method:'POST',
+          mode:'no-cors',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify(payload)
+        });
+      }else{
+        console.warn('CONFIG.SCRIPT_URL not set yet — running in preview mode (data not saved).');
+      }
+    }catch(err){
+      console.error('שגיאה בשליחה ל-Google:',err);
+    }finally{
+      btn.disabled=false; btn.textContent=originalLabel;
+    }
+
+    /* show success */
+    document.querySelector('.progress').style.display='none';
+    document.querySelector('.panels').style.display='none';
+    document.getElementById('successScreen').classList.add('show');
+    document.getElementById('successName').textContent=fname;
+    document.getElementById('scName').textContent=fname+' '+lname;
+    document.getElementById('scPhoto').src=preview.src;
+    document.getElementById('scStrengths').innerHTML='<strong style="color:#7B3FE4">חוזקות:</strong> '+strengths.join(' · ');
+    document.getElementById('scBless').innerHTML='<strong style="color:#7B3FE4">הברכה:</strong> "'+(bless.length>90?bless.slice(0,90)+'…':bless)+'"';
+    scrollForm();
+    fireConfetti();
+  }
+
+  /* ---- confetti ---- */
+  function fireConfetti(){
+    const wrap=document.getElementById('confetti');
+    const colors=['#FF1B9C','#7B3FE4','#FF4DB4','#9B57F2','#FFC857','#6322D6'];
+    for(let i=0;i<90;i++){
+      const c=document.createElement('div');
+      c.className='conf';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=colors[i%colors.length];
+      c.style.animation=`fall ${2.4+Math.random()*2}s linear ${Math.random()*0.6}s forwards`;
+      if(Math.random()>.6){c.style.borderRadius='50%';c.style.width='10px';c.style.height='10px';}
+      wrap.appendChild(c);
+      setTimeout(()=>c.remove(),5200);
+    }
+  }
+
+  /* ---- mouse trail: a drawn dashed line, like the logo's pencil path ---- */
+  (function trail(){
+    const canvas=document.getElementById('trailCanvas');
+    const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fine=window.matchMedia('(pointer: fine)').matches; /* skip on touch */
+    if(reduce||!fine||!canvas) return;
+    const ctx=canvas.getContext('2d');
+
+    let dpr=Math.min(window.devicePixelRatio||1,2);
+    function resize(){
+      dpr=Math.min(window.devicePixelRatio||1,2);
+      canvas.width=innerWidth*dpr; canvas.height=innerHeight*dpr;
+      canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    resize();
+    addEventListener('resize',resize);
+
+    const LIFE=600;          /* ms a point stays before vanishing */
+    const DASH=6, STEP=15;   /* dash length & spacing along the path */
+    const COLOR='123,63,228';/* logo purple, as rgb */
+    let pts=[];
+
+    addEventListener('mousemove',e=>{
+      pts.push({x:e.clientX,y:e.clientY,t:performance.now()});
+      if(pts.length>140) pts.shift();
+    },{passive:true});
+
+    /* Catmull-Rom -> smooth point at parameter u between p1,p2 */
+    function smooth(p0,p1,p2,p3,u){
+      const u2=u*u,u3=u2*u;
+      return {
+        x:.5*((2*p1.x)+(-p0.x+p2.x)*u+(2*p0.x-5*p1.x+4*p2.x-p3.x)*u2+(-p0.x+3*p1.x-3*p2.x+p3.x)*u3),
+        y:.5*((2*p1.y)+(-p0.y+p2.y)*u+(2*p0.y-5*p1.y+4*p2.y-p3.y)*u2+(-p0.y+3*p1.y-3*p2.y+p3.y)*u3),
+        t:p1.t+(p2.t-p1.t)*u
+      };
+    }
+
+    function frame(){
+      const now=performance.now();
+      pts=pts.filter(p=>now-p.t<LIFE);
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+
+      if(pts.length>=2){
+        /* build a smooth, evenly-resampled polyline */
+        const fine=[];
+        for(let i=0;i<pts.length-1;i++){
+          const p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||pts[i+1];
+          const seg=Math.hypot(p2.x-p1.x,p2.y-p1.y);
+          const sub=Math.max(2,Math.min(14,Math.round(seg/6)));
+          for(let s=0;s<sub;s++) fine.push(smooth(p0,p1,p2,p3,s/sub));
+        }
+        fine.push(pts[pts.length-1]);
+
+        /* walk the polyline by arc length, dropping a dash every STEP px */
+        ctx.lineCap='round'; ctx.lineWidth=3.6;
+        let acc=0, gap=0;
+        for(let i=1;i<fine.length;i++){
+          const a=fine[i-1], b=fine[i];
+          const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy);
+          if(d===0) continue;
+          let rem=d, ox=a.x, oy=a.y;
+          const ux=dx/d, uy=dy/d;
+          while(rem>0){
+            const need=(gap<DASH?DASH-gap:STEP-gap); /* finishing a dash or waiting in a gap */
+            const take=Math.min(need,rem);
+            if(gap<DASH){
+              const age=(now-b.t)/LIFE;            /* 0 = at cursor, 1 = oldest */
+              const alpha=Math.max(0,Math.pow(1-age,1.4));
+              ctx.strokeStyle='rgba('+COLOR+','+alpha+')';
+              ctx.beginPath();
+              ctx.moveTo(ox,oy);
+              ctx.lineTo(ox+ux*take,oy+uy*take);
+              ctx.stroke();
+            }
+            ox+=ux*take; oy+=uy*take; rem-=take; gap+=take;
+            if(gap>=STEP) gap=0;
+          }
+          acc+=d;
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  render();
+})();
+</script>
+</body>
+</html>
