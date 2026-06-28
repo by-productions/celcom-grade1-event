@@ -70,3 +70,22 @@ function doPost(e) {
 function doGet() {
   return ContentService.createTextOutput('✓ נקודת הקצה של אירוע סלקום פעילה');
 }
+
+/****************************************************************
+ *  ⭐ הריצי את הפונקציה הזו פעם אחת (כפתור Run למעלה)
+ *  היא תבקש את כל ההרשאות (כולל Drive) ותיצור את כותרות הגיליון.
+ *  אחרי שתאשרי — הטופס יעבוד מלא.
+ ****************************************************************/
+function setup() {
+  // נגיעה ב-Drive: מכריחה את גוגל לבקש הרשאת Drive מלאה
+  const folder = DriveApp.getFolderById(FOLDER_ID);
+
+  // יצירת כותרות בגיליון (אם ריק)
+  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(HEADERS);
+    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
+  }
+
+  Logger.log('✓ הכל מחובר! תיקיית Drive: "' + folder.getName() + '" | גיליון: "' + sheet.getName() + '"');
+}
