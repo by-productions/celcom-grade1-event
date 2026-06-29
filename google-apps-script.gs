@@ -23,17 +23,23 @@ function doPost(e) {
     // ----- 1) שמירת התמונה ל-Drive -----
     let photoUrl = '';
     if (data.photoData && data.photoData.indexOf(',') > -1) {
-      const parts       = data.photoData.split(',');
-      const contentType = (parts[0].match(/data:(.*?);/) || [])[1] || 'image/jpeg';
-      const ext         = (contentType.split('/')[1] || 'jpg').replace('jpeg','jpg');
-      const bytes       = Utilities.base64Decode(parts[1]);
-      const fileName    = (data.photoName || 'registration') + '.' + ext;
-      const blob        = Utilities.newBlob(bytes, contentType, fileName);
+      try {
+        const parts       = data.photoData.split(',');
+        const contentType = (parts[0].match(/data:(.*?);/) || [])[1] || 'image/jpeg';
+        const ext         = (contentType.split('/')[1] || 'jpg').replace('jpeg','jpg');
+        const bytes       = Utilities.base64Decode(parts[1]);
+        const fileName    = (data.photoName || 'registration') + '.' + ext;
+        const blob        = Utilities.newBlob(bytes, contentType, fileName);
 
-      const folder = DriveApp.getFolderById(FOLDER_ID);
-      const file   = folder.createFile(blob);
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      photoUrl = file.getUrl();
+        const folder = DriveApp.getFolderById(FOLDER_ID);
+        const file   = folder.createFile(blob);
+        // ניסיון לשתף בקישור ציבורי; אם הדומיין חוסם שיתוף — ממשיכים בלי להיכשל
+        try { file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (shareErr) {}
+        photoUrl = file.getUrl();
+      } catch (photoErr) {
+        // גם אם שמירת התמונה נכשלה — לא חוסמים את הכתיבה לגיליון
+        photoUrl = 'שגיאה בשמירת תמונה';
+      }
     }
 
     // ----- 2) כתיבת שורה לגיליון -----

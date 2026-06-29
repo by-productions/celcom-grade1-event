@@ -293,7 +293,7 @@ body{
 /* ============ SUCCESS ============ */
 .success{display:none;text-align:center;padding:54px clamp(22px,5vw,46px) 60px}
 .success.show{display:block;animation:fadeUp .6s ease both}
-.success .star-pop{width:120px;margin:0 auto 22px;animation:pop .7s cubic-bezier(.34,1.8,.5,1) both}
+.success .star-pop{display:block;width:120px;height:auto;margin:0 auto 22px;animation:pop .7s cubic-bezier(.34,1.8,.5,1) both}
 @keyframes pop{from{transform:scale(0) rotate(-25deg)}to{transform:scale(1) rotate(0)}}
 .success h3{font-family:'Varela Round',sans-serif;font-size:clamp(28px,5vw,40px);color:var(--violet);margin-bottom:14px}
 .success p{color:var(--ink-soft);font-size:16.5px;line-height:1.7;max-width:440px;margin:0 auto 8px}
@@ -571,7 +571,8 @@ body{
 
     <!-- SUCCESS -->
     <div class="success" id="successScreen">
-      <svg class="star-pop" viewBox="0 0 120 120"><use href="#starGlyph"/></svg>
+      <img class="star-pop" src="assets/star.png" alt="">
+
       <h3 class="display">הסיפור נשלח בהצלחה!</h3>
       <p>תודה שכתבתם איתנו את הפרק הראשון בסיפור של <span class="kid-name" id="successName">הילד/ה</span>.<br>נתראה ב-28 ביולי בבריכת כפר מעש לחגיגה גדולה 🎉</p>
       <div class="success-card" id="successCard">
