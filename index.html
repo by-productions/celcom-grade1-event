@@ -59,13 +59,14 @@ body{
 @keyframes spinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
 .d-star-l{top:13%;left:5%;width:122px;height:auto;animation:bob 7s ease-in-out infinite;--rot:-10deg}
+.d-star-r{top:60%;right:4%;width:110px;height:auto;animation:bob2 8.5s ease-in-out infinite;--rot:12deg}
 .d-pencil-l{bottom:8%;left:3%;width:130px;animation:bob2 8s ease-in-out infinite;--rot:38deg}
 .d-pencil-r{top:24%;right:5%;width:96px;animation:bob 6.5s ease-in-out infinite;--rot:-22deg}
 .d-mini1{top:40%;left:12%;width:30px;animation:twinkle 4s ease-in-out infinite}
 .d-mini2{top:70%;right:10%;width:24px;animation:twinkle 5s ease-in-out infinite .6s}
 .d-mini3{top:12%;right:24%;width:20px;animation:twinkle 3.5s ease-in-out infinite 1s}
 .d-dots{top:30%;left:4%;width:120px;opacity:.5;animation:bob 9s ease-in-out infinite}
-@media(max-width:880px){.d-pencil-r,.d-dots{display:none}.d-pencil-l{width:90px;opacity:.7}.d-star-l{width:80px}}
+@media(max-width:880px){.d-pencil-r,.d-dots{display:none}.d-pencil-l{width:90px;opacity:.7}.d-star-l{width:80px}.d-star-r{width:70px}}
 
 /* ============ HEADER ============ */
 .topbar{
@@ -339,6 +340,7 @@ body{
 <!-- ===== floating decoration ===== -->
 <div class="decor" aria-hidden="true">
   <img class="float d-star-l" src="assets/star.png" alt="">
+  <img class="float d-star-r" src="assets/star2.png" alt="">
   <svg class="float d-pencil-l" viewBox="0 0 60 220"><use href="#pencilGlyph"/></svg>
   <svg class="float d-pencil-r" viewBox="0 0 60 220"><use href="#pencilGlyph"/></svg>
   <svg class="float d-mini1" viewBox="0 0 40 40"><path d="M20 2l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#FF1B9C"/></svg>
@@ -392,7 +394,7 @@ body{
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="hero-logo">
-    <img src="assets/logo.png" alt="סיפור חדש מתחיל">
+    <img src="assets/logo-new.png" alt="סיפור חדש מתחיל">
   </div>
 
   <p class="hero-sub">חוגגים את הילדים שלנו שעולים לכיתה א'.<br>בואו נכתוב יחד את הפרק הראשון בסיפור שלהם.</p>
