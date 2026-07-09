@@ -120,8 +120,16 @@ body{
 .hero-sub{
   position:relative;z-index:2;
   font-size:clamp(16px,2.4vw,20px);font-weight:600;color:var(--ink-soft);
-  max-width:560px;margin:0 auto 22px;line-height:1.6;
+  max-width:560px;margin:0 auto 18px;line-height:1.6;
 }
+.hero-lead{
+  position:relative;z-index:2;
+  max-width:620px;margin:0 auto 30px;
+  font-size:clamp(14.5px,2vw,17px);line-height:1.8;color:#4a3a6e;font-weight:500;
+}
+.hero-lead p{margin-bottom:12px}
+.hero-lead p:last-child{margin-bottom:0}
+.hero-lead strong{color:var(--magenta);font-weight:800}
 .event-chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
 .chip{
   display:inline-flex;align-items:center;gap:9px;
@@ -439,21 +447,12 @@ body{
     <img src="assets/logo-vector.png" alt="סיפור חדש מתחיל">
   </div>
 
-  <p class="hero-sub">חוגגים את הילדים שלנו שעולים לכיתה א'.<br>בואו נכתוב יחד את הפרק הראשון בסיפור שלהם.</p>
+  <p class="hero-sub">חוגגים את הילדים שלנו לכיתה א'<br>בואו נכתוב יחד את הפרק הראשון בסיפור שלהם.</p>
 
-  <div class="event-chips">
-    <span class="chip">
-      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="3" stroke="#7B3FE4" stroke-width="2"/><path d="M3 9h18M8 3v4M16 3v4" stroke="#FF1B9C" stroke-width="2" stroke-linecap="round"/></svg>
-      3 באוגוסט
-    </span>
-    <span class="chip">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z" stroke="#7B3FE4" stroke-width="2"/><circle cx="12" cy="9" r="2.5" fill="#FF1B9C"/></svg>
-      ספארי
-    </span>
-    <span class="chip">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z" stroke="#7B3FE4" stroke-width="2" stroke-linejoin="round"/></svg>
-      ילדי כיתות א'
-    </span>
+  <div class="hero-lead">
+    <p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך חדשה.</p>
+    <p>את הדברים שתכתבו, יחד עם התמונה שתשלחו, נעצב לברכה חגיגית ומרגשת, שתוענק לכם כמזכרת ביום האירוע.</p>
+    <p>נשמח אם תמלאו את הטופס באמצעות הקישור המצורף עד לתאריך <strong>15.07</strong>, כדי שנוכל להכין את הברכה בזמן.</p>
   </div>
 
   <button class="cta-hero display" onclick="document.getElementById('formTop').scrollIntoView()">
@@ -467,7 +466,6 @@ body{
   <h2 class="display">משפחת סלקום ❤️</h2>
   <p>אנחנו רגילים לחבר בין אנשים, אבל הפעם אנחנו חוגגים חיבור מסוג אחר – החיבור של הילדים שלנו לעולם חדש של למידה, חברים, חוויות וגילויים.</p>
   <p>המעבר לכיתה א' הוא רגע משמעותי ומרגש. רגע שבו כל ילד מתחיל לכתוב <strong>פרק חדש</strong> בסיפור החיים שלו.</p>
-  <p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך החדשה.</p>
 </section>
 
 <!-- ===== schedule (לוז) ===== -->
