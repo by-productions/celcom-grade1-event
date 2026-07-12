@@ -60,6 +60,15 @@
     clip-path:polygon(51.9% 0.0%,43.1% 1.0%,34.5% 7.3%,23.7% 7.5%,16.9% 11.6%,13.8% 22.1%,5.9% 29.6%,7.1% 39.8%,0.0% 49.8%,1.1% 56.0%,5.2% 60.7%,0.7% 67.9%,0.3% 74.5%,10.0% 88.3%,15.8% 92.1%,26.9% 93.1%,33.9% 98.0%,41.2% 99.9%,50.2% 99.0%,56.1% 95.0%,64.7% 96.1%,69.5% 92.7%,82.7% 91.6%,95.6% 78.8%,98.1% 73.3%,94.4% 62.5%,99.1% 56.9%,99.7% 50.5%,93.4% 41.7%,94.4% 30.6%,86.7% 23.7%,85.1% 15.1%,77.4% 8.8%,65.7% 7.6%,60.5% 2.7%);
   }
 
+  /* static "משפחת סלקום" letter on the back cover */
+  .coverletter{
+    position:absolute;z-index:2;direction:rtl;text-align:right;
+    right:59.3%;width:28.6%;top:26.4%;height:42%;
+    color:#4A1E8C;font-size:1.2cqw;line-height:1.62;font-weight:500;
+  }
+  .coverletter p{margin:0 0 .8em}
+  .coverletter p:last-child{margin-bottom:0}
+
   /* text overlays (left page) */
   .ovl{position:absolute;z-index:2;direction:rtl;line-height:1.3}
   .banner{ /* name ribbon */
@@ -73,13 +82,13 @@
     right:60.5%;width:27%;text-align:right;
   }
   .h{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-weight:700;font-size:2.2cqw;margin:0}
-  .h1{top:28.8%;color:var(--pink)}
-  .h2{top:43.2%;color:var(--purple)}
-  .h3{top:57.2%;color:var(--pink)}
-  .b{font-size:1.62cqw;color:var(--body);overflow:hidden}
-  .b1{top:32.6%;height:9.5%}
-  .b2{top:47%;height:9%}
-  .b3{top:61%;height:11%}
+  .h1{top:26.5%;color:var(--pink)}
+  .h2{top:44%;color:var(--purple)}
+  .h3{top:61%;color:var(--pink)}
+  .b{font-size:1.6cqw;color:var(--body);overflow:hidden}
+  .b1{top:30.2%;height:12%}
+  .b2{top:47.7%;height:12%}
+  .b3{top:64.7%;height:12%}
 </style>
 </head>
 <body>
@@ -152,8 +161,13 @@
   function certificate(rec){
     const wrap=document.createElement('div'); wrap.className='cert';
 
-    // COVER (static for everyone)
+    // COVER (static for everyone) — with the "משפחת סלקום" letter
     const cover=document.createElement('div'); cover.className='page cover';
+    cover.innerHTML='<div class="coverletter">'+
+      '<p>אנחנו רגילים לחבר בין אנשים, אבל הפעם אנחנו חוגגים חיבור מסוג אחר – החיבור של הילדים שלנו לעולם חדש של למידה, חברים, חוויות וגילויים.</p>'+
+      '<p>המעבר לכיתה א\' הוא רגע משמעותי ומרגש. רגע שבו כל ילד מתחיל לכתוב פרק חדש בסיפור החיים שלו.</p>'+
+      '<p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך החדשה.</p>'+
+      '</div>';
     wrap.appendChild(cover);
 
     // INSIDE (personalized)
@@ -185,16 +199,19 @@
     d.textContent=text||''; return d;
   }
 
-  /* ---------- shrink body text to fit its box ---------- */
+  /* ---------- shrink body text to fit its box (also before printing) ---------- */
   function autofit(){
     document.querySelectorAll('.b').forEach(el=>{
+      el.style.fontSize='';                 // reset to responsive CSS size
       let fs=parseFloat(getComputedStyle(el).fontSize);
       let guard=0;
-      while(el.scrollHeight>el.clientHeight+1 && fs>8 && guard<60){
-        fs-=0.6; el.style.fontSize=fs+'px'; guard++;
+      while(el.scrollHeight>el.clientHeight+1 && fs>7 && guard<90){
+        fs-=0.5; el.style.fontSize=fs+'px'; guard++;
       }
     });
   }
+  window.addEventListener('beforeprint',autofit);
+  window.addEventListener('resize',()=>{clearTimeout(window._rt);window._rt=setTimeout(autofit,150);});
 
   /* ---------- render all ---------- */
   function render(rows){
