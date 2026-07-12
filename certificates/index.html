@@ -68,11 +68,16 @@
   .coverletter p{margin:0 0 .8em}
   .coverletter p:last-child{margin-bottom:0}
 
-  /* name banner — arched text laid exactly on the ribbon (viewBox = page px 300,100,460,180) */
-  .banner{position:absolute;z-index:2;left:15%;width:23%;top:7.07%;height:12.73%;overflow:visible}
-  .banner svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 2px 3px rgba(58,10,90,.4))}
-  .bannertext{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;
-    font-weight:700;font-size:48px;fill:#fff}
+  /* custom name banner — sizes itself to the name (replaces the template ribbon) */
+  .nb-wrap{position:absolute;z-index:2;left:1%;width:49%;top:8.7%;text-align:center;direction:rtl}
+  .nb{display:inline-block;position:relative;
+    font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;
+    font-weight:700;color:#fff;font-size:2.6cqw;line-height:1;white-space:nowrap;
+    padding:.62em 2em;border-radius:9px;
+    background:linear-gradient(180deg,#9A57F0 0%,#7B3FE4 48%,#5E27C6 100%);
+    clip-path:polygon(0 0,100% 0,93% 50%,100% 100%,0 100%,7% 50%);
+    box-shadow:0 7px 13px -4px rgba(74,30,140,.5),inset 0 3px 0 rgba(255,255,255,.22),inset 0 -3px 0 rgba(0,0,0,.12);
+    text-shadow:0 2px 3px rgba(58,10,90,.4)}
 
   /* left-page content sections (header + text + colored dashed underline) */
   .sec{position:absolute;z-index:2;right:60.3%;width:27.6%;direction:rtl;text-align:right}
@@ -197,27 +202,18 @@
     else { img.classList.add('empty'); }
     inside.appendChild(img);
 
-    inside.appendChild(bannerEl('על '+name, certN));
+    inside.appendChild(bannerEl('על '+name));
     inside.appendChild(section('sec1','h1','u1','החוזקות של '+name, rec.strengths));
     inside.appendChild(section('sec2','h2','u2','החלומות של '+name, rec.dreams));
     inside.appendChild(section('sec3','h3','u3','הברכה שלנו', rec.blessing));
-    certN++;
 
     wrap.appendChild(inside);
     return wrap;
   }
-  let certN=0;
-  const SVGNS='http://www.w3.org/2000/svg';
-  function bannerEl(text,uid){
-    const svg=document.createElementNS(SVGNS,'svg');
-    svg.setAttribute('viewBox','300 100 460 180'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
-    const p=document.createElementNS(SVGNS,'path');
-    p.setAttribute('id','arc'+uid); p.setAttribute('d','M350 211 Q505 156 680 209'); p.setAttribute('fill','none');
-    svg.appendChild(p);
-    const t=document.createElementNS(SVGNS,'text'); t.setAttribute('class','bannertext'); t.setAttribute('text-anchor','middle');
-    const tp=document.createElementNS(SVGNS,'textPath'); tp.setAttribute('href','#arc'+uid); tp.setAttribute('startOffset','50%');
-    tp.textContent=text; t.appendChild(tp); svg.appendChild(t);
-    const w=document.createElement('div'); w.className='banner'; w.appendChild(svg); return w;
+  function bannerEl(text){
+    const w=document.createElement('div'); w.className='nb-wrap';
+    const b=document.createElement('div'); b.className='nb'; b.textContent=text;
+    w.appendChild(b); return w;
   }
   function section(secCls,hCls,uCls,head,body){
     const s=document.createElement('div'); s.className='sec '+secCls;
@@ -323,8 +319,8 @@
   .bar{display:none !important}
   #sheets{padding:0;margin:0}
   .cert{width:auto;margin:0}
-  /* each page = exactly one A4 landscape sheet (matches the 2000x1414 template ratio) */
-  .page{width:297mm;height:210mm;aspect-ratio:auto;border-radius:0;box-shadow:none;
+  /* each page fills the whole sheet, whatever the paper/margins settings */
+  .page{width:100vw;height:100vh;aspect-ratio:auto;border-radius:0;box-shadow:none;
     overflow:hidden;break-inside:avoid;page-break-after:always;margin:0}
   .page.inside{margin-top:0}
   .cert:last-child .page.inside{page-break-after:auto}
