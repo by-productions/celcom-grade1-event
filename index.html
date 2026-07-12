@@ -630,6 +630,11 @@ body{
           </div>
         </div>
         <div class="field">
+          <label for="employeeId">מספר עובד <span class="req">*</span></label>
+          <input class="input" id="employeeId" type="text" placeholder="מספר העובד בסלקום" inputmode="numeric" autocomplete="off">
+          <div class="err" data-err="employee">חסר מספר עובד</div>
+        </div>
+        <div class="field">
           <label for="email">דוא"ל <span class="req">*</span></label>
           <input class="input" id="email" type="email" placeholder="name@example.com" inputmode="email" autocomplete="email">
           <div class="err" data-err="email">כתובת אימייל לא תקינה</div>
@@ -742,6 +747,8 @@ body{
       if(!phoneOk){showErr('phone',true);markInvalid(ph,true);ok=false}else{showErr('phone',false);markInvalid(ph,false)}
       const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value.trim());
       if(!emailOk){showErr('email',true);markInvalid(em,true);ok=false}else{showErr('email',false);markInvalid(em,false)}
+      const emp=document.getElementById('employeeId');
+      if(!emp.value.trim()){showErr('employee',true);markInvalid(emp,true);ok=false}else{showErr('employee',false);markInvalid(emp,false)}
     }
     return ok;
   }
@@ -764,7 +771,7 @@ body{
     el.addEventListener('input',()=>{ if(countId) document.getElementById(countId).textContent=el.value.length; el.classList.remove('invalid'); });
   };
   bind('blessing','blessCount'); bind('dreams','dreamCount');
-  ['fname','lname','parent','phone','email','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
+  ['fname','lname','parent','phone','email','employeeId','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
 
   /* ---- strengths chips ---- */
   document.querySelectorAll('.pick').forEach(c=>{
@@ -802,13 +809,14 @@ body{
     const parent=document.getElementById('parent').value.trim();
     const phone=document.getElementById('phone').value.trim();
     const email=document.getElementById('email').value.trim();
+    const employeeId=document.getElementById('employeeId').value.trim();
 
     const payload={
       fname, lname,
       strengths: strengths.join(' · '),
       blessing: bless,
       dreams,
-      parent, phone, email,
+      parent, phone, email, employeeId,
       photoData: preview.src || '',
       photoName: (fname+'_'+lname).replace(/\s+/g,'-')
     };

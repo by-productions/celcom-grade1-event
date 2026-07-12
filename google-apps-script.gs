@@ -14,7 +14,7 @@ const SHEET_ID  = '12QAZxngk4gaiMUVnHyTASRZW-5PhM6namaSnHZRJYyc';
 const FOLDER_ID = '1dyitJA7VKGed4M0bw44_g3QwWEMS11N4';
 
 // כותרות העמודות בגיליון
-const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה'];
+const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה','מספר עובד'];
 
 function doPost(e) {
   try {
@@ -58,7 +58,8 @@ function doPost(e) {
       data.parent    || '',
       "'" + (data.phone || ''),   // הגרש שומר על אפס מוביל בטלפון
       data.email     || '',
-      photoUrl
+      photoUrl,
+      "'" + (data.employeeId || '')   // הגרש שומר על אפס מוביל במספר עובד
     ]);
 
     return ContentService
