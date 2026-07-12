@@ -53,11 +53,11 @@
   .page.inside{background-image:url('assets/inside-blank.png');margin-top:14px}
 
   /* photo on the inside right-page frame */
-  /* photo — clipped to the exact green frame opening */
+  /* photo — clipped to the exact (smooth) green frame opening */
   .photo{
     position:absolute;left:54.5%;top:14.85%;width:37.35%;height:73.76%;
     object-fit:cover;z-index:1;background:#efe8fb;
-    clip-path:polygon(51.9% 0.0%,43.1% 1.0%,34.5% 7.3%,23.7% 7.5%,16.9% 11.6%,13.8% 22.1%,5.9% 29.6%,7.1% 39.8%,0.0% 49.8%,1.1% 56.0%,5.2% 60.7%,0.7% 67.9%,0.3% 74.5%,10.0% 88.3%,15.8% 92.1%,26.9% 93.1%,33.9% 98.0%,41.2% 99.9%,50.2% 99.0%,56.1% 95.0%,64.7% 96.1%,69.5% 92.7%,82.7% 91.6%,95.6% 78.8%,98.1% 73.3%,94.4% 62.5%,99.1% 56.9%,99.7% 50.5%,93.4% 41.7%,94.4% 30.6%,86.7% 23.7%,85.1% 15.1%,77.4% 8.8%,65.7% 7.6%,60.5% 2.7%);
+    clip-path:url(#frame);
   }
 
   /* static "משפחת סלקום" letter on the back cover */
@@ -69,29 +69,36 @@
   .coverletter p{margin:0 0 .8em}
   .coverletter p:last-child{margin-bottom:0}
 
-  /* text overlays (left page) */
-  .ovl{position:absolute;z-index:2;direction:rtl;line-height:1.3}
-  .banner{ /* name ribbon */
-    position:absolute;z-index:2;direction:rtl;
-    left:16.2%;width:20.5%;top:7.6%;height:9.2%;
-    display:flex;align-items:center;justify-content:center;text-align:center;
-    color:#fff;font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-size:2.5cqw;
-    text-shadow:0 2px 5px rgba(58,10,90,.5);
-  }
-  .col{ /* shared right-aligned text column */
-    right:60.5%;width:27%;text-align:right;
-  }
-  .h{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-weight:700;font-size:2.2cqw;margin:0}
-  .h1{top:26.5%;color:var(--pink)}
-  .h2{top:44%;color:var(--purple)}
-  .h3{top:61%;color:var(--pink)}
-  .b{font-size:1.6cqw;color:var(--body);overflow:hidden}
-  .b1{top:30.2%;height:12%}
-  .b2{top:47.7%;height:12%}
-  .b3{top:64.7%;height:12%}
+  /* name banner — arched text on the ribbon */
+  .banner{position:absolute;z-index:2;left:15.6%;width:22.3%;top:5.2%;height:11%;overflow:visible}
+  .banner svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 2px 3px rgba(58,10,90,.45))}
+  .bannertext{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;
+    font-weight:700;font-size:38px;fill:#fff}
+
+  /* left-page content sections (header + text + colored dashed underline) */
+  .sec{position:absolute;z-index:2;right:60.3%;width:27.6%;direction:rtl;text-align:right}
+  .sec1{top:25.5%}.sec2{top:43.5%}.sec3{top:61.5%}
+  .h{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-weight:700;font-size:2.15cqw;margin:0 0 .35em}
+  .h1{color:var(--pink)}.h2{color:var(--purple)}.h3{color:var(--pink)}
+  .b{font-size:1.55cqw;color:var(--body);line-height:1.5;max-height:9.6cqw;overflow:hidden}
+  .uline{margin-top:.5em;height:.5cqw;
+    background:repeating-linear-gradient(90deg,var(--c1) 0 1.1cqw,transparent 1.1cqw 2cqw,var(--c2) 2cqw 3.1cqw,transparent 3.1cqw 4cqw);
+    border-radius:2px}
+  .u1{--c1:#FF1B9C;--c2:#8B3FF0}
+  .u2{--c1:#8B3FF0;--c2:#FF4DB4}
+  .u3{--c1:#FF1B9C;--c2:#6322D6}
+
+  /* tiny employee number on the back cover */
+  .empno{position:absolute;z-index:2;left:8%;width:34%;bottom:1.3%;text-align:center;
+    direction:rtl;color:#9a8bc0;font-size:.72cqw;letter-spacing:.2px}
 </style>
 </head>
 <body>
+
+<!-- smooth clip matching the exact green frame opening (objectBoundingBox 0..1) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <clipPath id="frame" clipPathUnits="objectBoundingBox"><path d="M 0.4779 0.0000 C 0.4502 0.0024 0.4216 0.0119 0.3990 0.0239 C 0.3765 0.0359 0.3667 0.0641 0.3427 0.0719 C 0.3187 0.0797 0.2817 0.0656 0.2550 0.0709 C 0.2282 0.0763 0.2009 0.0896 0.1821 0.1042 C 0.1632 0.1189 0.1497 0.1390 0.1419 0.1587 C 0.1341 0.1784 0.1464 0.2041 0.1353 0.2224 C 0.1242 0.2406 0.0892 0.2506 0.0753 0.2682 C 0.0615 0.2858 0.0532 0.3076 0.0522 0.3277 C 0.0513 0.3479 0.0743 0.3701 0.0696 0.3890 C 0.0649 0.4079 0.0357 0.4227 0.0241 0.4413 C 0.0125 0.4599 0.0018 0.4803 0.0000 0.5006 C -0.0018 0.5209 0.0052 0.5435 0.0134 0.5630 C 0.0216 0.5826 0.0497 0.5995 0.0491 0.6178 C 0.0484 0.6360 0.0173 0.6528 0.0094 0.6724 C 0.0014 0.6920 -0.0021 0.7155 0.0013 0.7356 C 0.0048 0.7558 0.0168 0.7758 0.0302 0.7935 C 0.0436 0.8112 0.0674 0.8244 0.0817 0.8418 C 0.0960 0.8592 0.0979 0.8833 0.1160 0.8980 C 0.1341 0.9127 0.1636 0.9234 0.1902 0.9300 C 0.2168 0.9366 0.2505 0.9292 0.2756 0.9375 C 0.3006 0.9459 0.3160 0.9699 0.3405 0.9802 C 0.3649 0.9904 0.3949 0.9980 0.4223 0.9990 C 0.4497 1.0000 0.4799 0.9946 0.5047 0.9862 C 0.5294 0.9779 0.5458 0.9541 0.5707 0.9492 C 0.5957 0.9443 0.6289 0.9599 0.6546 0.9569 C 0.6803 0.9538 0.6990 0.9369 0.7251 0.9310 C 0.7512 0.9251 0.7861 0.9301 0.8112 0.9214 C 0.8363 0.9128 0.8593 0.8953 0.8755 0.8792 C 0.8917 0.8630 0.8939 0.8419 0.9086 0.8248 C 0.9233 0.8077 0.9519 0.7948 0.9640 0.7765 C 0.9761 0.7583 0.9816 0.7356 0.9813 0.7152 C 0.9809 0.6949 0.9639 0.6736 0.9621 0.6545 C 0.9602 0.6354 0.9642 0.6193 0.9701 0.6005 C 0.9759 0.5818 0.9942 0.5625 0.9973 0.5422 C 1.0005 0.5220 0.9975 0.4986 0.9889 0.4791 C 0.9804 0.4596 0.9525 0.4441 0.9461 0.4254 C 0.9397 0.4068 0.9511 0.3873 0.9505 0.3672 C 0.9499 0.3471 0.9514 0.3240 0.9424 0.3048 C 0.9335 0.2856 0.9089 0.2699 0.8967 0.2520 C 0.8844 0.2341 0.8779 0.2163 0.8688 0.1974 C 0.8597 0.1786 0.8564 0.1565 0.8420 0.1390 C 0.8276 0.1215 0.8057 0.1034 0.7824 0.0925 C 0.7591 0.0816 0.7268 0.0812 0.7021 0.0738 C 0.6773 0.0665 0.6566 0.0591 0.6338 0.0484 C 0.6110 0.0377 0.5911 0.0176 0.5651 0.0096 C 0.5391 0.0015 0.5056 -0.0024 0.4779 0.0000 Z"/></clipPath>
+</defs></svg>
 
 <div class="bar">
   <h1>מחולל תעודות · סיפור חדש מתחיל</h1>
@@ -161,13 +168,17 @@
   function certificate(rec){
     const wrap=document.createElement('div'); wrap.className='cert';
 
-    // COVER (static for everyone) — with the "משפחת סלקום" letter
+    // COVER (static letter for everyone) + tiny employee number
     const cover=document.createElement('div'); cover.className='page cover';
     cover.innerHTML='<div class="coverletter">'+
       '<p>אנחנו רגילים לחבר בין אנשים, אבל הפעם אנחנו חוגגים חיבור מסוג אחר – החיבור של הילדים שלנו לעולם חדש של למידה, חברים, חוויות וגילויים.</p>'+
       '<p>המעבר לכיתה א\' הוא רגע משמעותי ומרגש. רגע שבו כל ילד מתחיל לכתוב פרק חדש בסיפור החיים שלו.</p>'+
       '<p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך החדשה.</p>'+
       '</div>';
+    if(rec.employeeId){
+      const emp=document.createElement('div'); emp.className='empno';
+      emp.textContent='מס׳ עובד: '+rec.employeeId; cover.appendChild(emp);
+    }
     wrap.appendChild(cover);
 
     // INSIDE (personalized)
@@ -183,20 +194,34 @@
     else { img.classList.add('empty'); }
     inside.appendChild(img);
 
-    inside.appendChild(ovl('banner','על '+name));
-    inside.appendChild(ovl('ovl col h h1','החוזקות של '+name));
-    inside.appendChild(ovl('ovl col b b1',rec.strengths));
-    inside.appendChild(ovl('ovl col h h2','החלומות של '+name));
-    inside.appendChild(ovl('ovl col b b2',rec.dreams));
-    inside.appendChild(ovl('ovl col h h3','הברכה שלנו'));
-    inside.appendChild(ovl('ovl col b b3',rec.blessing));
+    inside.appendChild(bannerEl('על '+name, certN));
+    inside.appendChild(section('sec1','h1','u1','החוזקות של '+name, rec.strengths));
+    inside.appendChild(section('sec2','h2','u2','החלומות של '+name, rec.dreams));
+    inside.appendChild(section('sec3','h3','u3','הברכה שלנו', rec.blessing));
+    certN++;
 
     wrap.appendChild(inside);
     return wrap;
   }
-  function ovl(cls,text){
-    const d=document.createElement('div'); d.className=cls;
-    d.textContent=text||''; return d;
+  let certN=0;
+  const SVGNS='http://www.w3.org/2000/svg';
+  function bannerEl(text,uid){
+    const svg=document.createElementNS(SVGNS,'svg');
+    svg.setAttribute('viewBox','0 0 320 92'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    const p=document.createElementNS(SVGNS,'path');
+    p.setAttribute('id','arc'+uid); p.setAttribute('d','M20 60 Q160 24 300 60'); p.setAttribute('fill','none');
+    svg.appendChild(p);
+    const t=document.createElementNS(SVGNS,'text'); t.setAttribute('class','bannertext'); t.setAttribute('text-anchor','middle');
+    const tp=document.createElementNS(SVGNS,'textPath'); tp.setAttribute('href','#arc'+uid); tp.setAttribute('startOffset','50%');
+    tp.textContent=text; t.appendChild(tp); svg.appendChild(t);
+    const w=document.createElement('div'); w.className='banner'; w.appendChild(svg); return w;
+  }
+  function section(secCls,hCls,uCls,head,body){
+    const s=document.createElement('div'); s.className='sec '+secCls;
+    const h=document.createElement('div'); h.className='h '+hCls; h.textContent=head;
+    const b=document.createElement('div'); b.className='b'; b.textContent=body||'';
+    const u=document.createElement('div'); u.className='uline '+uCls;
+    s.appendChild(h); s.appendChild(b); s.appendChild(u); return s;
   }
 
   /* ---------- shrink body text to fit its box (also before printing) ---------- */
@@ -225,6 +250,7 @@
       dreams:colIndex(headers,['חלומות','חלום']),
       blessing:colIndex(headers,['ברכה']),
       photo:colIndex(headers,['תמונה','תמונת','photo']),
+      employeeId:colIndex(headers,['מספר עובד','מס עובד','עובד','employee']),
     };
     if(idx.fname<0){status.textContent='לא זוהתה עמודת "שם הילד/ה". בדקו את שורת הכותרות.';return;}
     let n=0;
@@ -237,6 +263,7 @@
         dreams:idx.dreams>-1?(row[idx.dreams]||'').trim():'',
         blessing:idx.blessing>-1?(row[idx.blessing]||'').trim():'',
         photo:idx.photo>-1?(row[idx.photo]||'').trim():'',
+        employeeId:idx.employeeId>-1?(row[idx.employeeId]||'').replace(/^'/,'').trim():'',
       };
       if(!rec.fname && !rec.strengths && !rec.blessing) continue;
       rec.photoKey=normName(rec.fname+rec.lname);
