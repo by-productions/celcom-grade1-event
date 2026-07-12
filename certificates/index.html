@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>מחולל תעודות · סיפור חדש מתחיל</title>
+<style>
+  :root{
+    --purple:#7B3FE4; --pink:#E6189C; --ink:#3A1670; --body:#5b4a8e;
+    --bg:#F4ECFC;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Heebo','Assistant','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink)}
+
+  /* ---------- control bar (not printed) ---------- */
+  .bar{
+    position:sticky;top:0;z-index:100;background:#fff;
+    border-bottom:1px solid #e6dcf5;box-shadow:0 6px 20px -12px rgba(74,30,140,.4);
+    padding:16px clamp(14px,3vw,28px);
+  }
+  .bar h1{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-size:20px;margin:0 0 4px;color:var(--purple)}
+  .bar p{margin:0 0 12px;font-size:13.5px;color:#6a5a9e;line-height:1.6}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  textarea{
+    width:100%;min-height:90px;border:1.5px solid #d9c9f0;border-radius:12px;
+    padding:10px 12px;font-family:monospace;font-size:12.5px;resize:vertical;direction:ltr;
+  }
+  .btn{
+    font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-size:15px;border:none;border-radius:50px;cursor:pointer;
+    padding:11px 22px;color:#fff;background:linear-gradient(135deg,#FF1B9C,#7B3FE4);
+    box-shadow:0 10px 24px -10px rgba(230,24,156,.5);transition:transform .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.ghost{background:#efe7fb;color:var(--purple);box-shadow:none}
+  .btn.print{background:linear-gradient(135deg,#7B3FE4,#4A1E8C)}
+  label.file{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--purple);
+    background:#efe7fb;border-radius:50px;padding:10px 18px;cursor:pointer;font-weight:700}
+  label.file input{display:none}
+  .status{font-size:13.5px;color:#6a5a9e;margin-top:10px;min-height:18px}
+  .hint{font-size:12px;color:#9a86c4}
+
+  /* ---------- certificate pages ---------- */
+  #sheets{padding:24px 0 60px}
+  .cert{margin:0 auto 26px;width:min(1120px,96vw)}
+  .page{
+    position:relative;width:100%;aspect-ratio:2000/1414;
+    container-type:size;
+    background-size:cover;background-position:center;
+    border-radius:6px;overflow:hidden;box-shadow:0 20px 60px -24px rgba(74,30,140,.5);
+    background-repeat:no-repeat;
+  }
+  .page.cover{background-image:url('assets/cover.jpg')}
+  .page.inside{background-image:url('assets/inside-blank.png');margin-top:14px}
+
+  /* photo on the inside right-page frame */
+  /* photo — clipped to the exact green frame opening */
+  .photo{
+    position:absolute;left:54.5%;top:14.85%;width:37.35%;height:73.76%;
+    object-fit:cover;z-index:1;background:#efe8fb;
+    clip-path:polygon(51.9% 0.0%,43.1% 1.0%,34.5% 7.3%,23.7% 7.5%,16.9% 11.6%,13.8% 22.1%,5.9% 29.6%,7.1% 39.8%,0.0% 49.8%,1.1% 56.0%,5.2% 60.7%,0.7% 67.9%,0.3% 74.5%,10.0% 88.3%,15.8% 92.1%,26.9% 93.1%,33.9% 98.0%,41.2% 99.9%,50.2% 99.0%,56.1% 95.0%,64.7% 96.1%,69.5% 92.7%,82.7% 91.6%,95.6% 78.8%,98.1% 73.3%,94.4% 62.5%,99.1% 56.9%,99.7% 50.5%,93.4% 41.7%,94.4% 30.6%,86.7% 23.7%,85.1% 15.1%,77.4% 8.8%,65.7% 7.6%,60.5% 2.7%);
+  }
+
+  /* text overlays (left page) */
+  .ovl{position:absolute;z-index:2;direction:rtl;line-height:1.3}
+  .banner{ /* name ribbon */
+    position:absolute;z-index:2;direction:rtl;
+    left:16.2%;width:20.5%;top:7.6%;height:9.2%;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    color:#fff;font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-size:2.5cqw;
+    text-shadow:0 2px 5px rgba(58,10,90,.5);
+  }
+  .col{ /* shared right-aligned text column */
+    right:60.5%;width:27%;text-align:right;
+  }
+  .h{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-weight:700;font-size:2.2cqw;margin:0}
+  .h1{top:28.8%;color:var(--pink)}
+  .h2{top:43.2%;color:var(--purple)}
+  .h3{top:57.2%;color:var(--pink)}
+  .b{font-size:1.62cqw;color:var(--body);overflow:hidden}
+  .b1{top:32.6%;height:9.5%}
+  .b2{top:47%;height:9%}
+  .b3{top:61%;height:11%}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>מחולל תעודות · סיפור חדש מתחיל</h1>
+  <p>
+    הדביקו את נתוני הגיליון (CSV) בתיבה, או העלו קובץ CSV. אפשר להעלות את תיקיית התמונות כדי לשבץ אותן אוטומטית (לפי שם הילד/ה).
+    בסוף לחצו “הדפס / שמור PDF” — בחלון ההדפסה בחרו <b>יעד: שמירה כ-PDF</b>, <b>פריסה: לרוחב</b>, <b>שוליים: ללא</b>, וסמנו <b>גרפיקת רקע</b>.
+  </p>
+  <div class="row">
+    <label class="file">📄 העלאת קובץ CSV <input type="file" id="csvFile" accept=".csv,text/csv"></label>
+    <label class="file">🖼️ העלאת תמונות <input type="file" id="imgFiles" accept="image/*" multiple></label>
+    <button class="btn ghost" id="loadBtn">טען מהתיבה למטה</button>
+    <button class="btn print" id="printBtn">🖨️ הדפס / שמור PDF</button>
+  </div>
+  <textarea id="csvText" placeholder="הדביקו כאן את תוכן ה-CSV (כולל שורת הכותרות)…"></textarea>
+  <div class="status" id="status"></div>
+  <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.</div>
+</div>
+
+<div id="sheets"></div>
+
+<script>
+(function(){
+  "use strict";
+  const $=s=>document.querySelector(s);
+  const sheets=$('#sheets'), status=$('#status');
+  let uploadedImages={}; // normalizedName -> dataURL
+
+  /* ---------- CSV parser (RFC-ish: quotes, commas, newlines) ---------- */
+  function parseCSV(text){
+    text=text.replace(/\r\n?/g,'\n').trim();
+    const rows=[]; let row=[], val='', q=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i];
+      if(q){
+        if(c==='"'){ if(text[i+1]==='"'){val+='"';i++;} else q=false; }
+        else val+=c;
+      }else{
+        if(c==='"')q=true;
+        else if(c===','){row.push(val);val='';}
+        else if(c==='\n'){row.push(val);rows.push(row);row=[];val='';}
+        else val+=c;
+      }
+    }
+    if(val!==''||row.length){row.push(val);rows.push(row);}
+    return rows.filter(r=>r.some(c=>c.trim()!==''));
+  }
+
+  /* ---------- header mapping ---------- */
+  function colIndex(headers,names){
+    for(const n of names){
+      const i=headers.findIndex(h=>h.trim().replace(/["׳']/g,'').includes(n));
+      if(i>-1)return i;
+    }
+    return -1;
+  }
+  function normName(s){return (s||'').replace(/\s+/g,'').replace(/["'׳`]/g,'').toLowerCase();}
+
+  /* ---------- Google Drive url -> displayable image url ---------- */
+  function driveThumb(url){
+    if(!url)return '';
+    const m=url.match(/[-\w]{25,}/); // file id
+    if(m && url.includes('drive.google')) return 'https://drive.google.com/thumbnail?id='+m[0]+'&sz=w1200';
+    return url;
+  }
+
+  /* ---------- build one certificate (cover + inside) ---------- */
+  function certificate(rec){
+    const wrap=document.createElement('div'); wrap.className='cert';
+
+    // COVER (static for everyone)
+    const cover=document.createElement('div'); cover.className='page cover';
+    wrap.appendChild(cover);
+
+    // INSIDE (personalized)
+    const inside=document.createElement('div'); inside.className='page inside';
+
+    const name=rec.fname||'';
+    // photo
+    const img=document.createElement('img'); img.className='photo'; img.alt='';
+    let src='';
+    if(rec.photoKey && uploadedImages[rec.photoKey]) src=uploadedImages[rec.photoKey];
+    else if(rec.photo) src=driveThumb(rec.photo);
+    if(src){ img.src=src; img.referrerPolicy='no-referrer'; }
+    else { img.classList.add('empty'); }
+    inside.appendChild(img);
+
+    inside.appendChild(ovl('banner','על '+name));
+    inside.appendChild(ovl('ovl col h h1','החוזקות של '+name));
+    inside.appendChild(ovl('ovl col b b1',rec.strengths));
+    inside.appendChild(ovl('ovl col h h2','החלומות של '+name));
+    inside.appendChild(ovl('ovl col b b2',rec.dreams));
+    inside.appendChild(ovl('ovl col h h3','הברכה שלנו'));
+    inside.appendChild(ovl('ovl col b b3',rec.blessing));
+
+    wrap.appendChild(inside);
+    return wrap;
+  }
+  function ovl(cls,text){
+    const d=document.createElement('div'); d.className=cls;
+    d.textContent=text||''; return d;
+  }
+
+  /* ---------- shrink body text to fit its box ---------- */
+  function autofit(){
+    document.querySelectorAll('.b').forEach(el=>{
+      let fs=parseFloat(getComputedStyle(el).fontSize);
+      let guard=0;
+      while(el.scrollHeight>el.clientHeight+1 && fs>8 && guard<60){
+        fs-=0.6; el.style.fontSize=fs+'px'; guard++;
+      }
+    });
+  }
+
+  /* ---------- render all ---------- */
+  function render(rows){
+    sheets.innerHTML='';
+    if(rows.length<2){status.textContent='לא נמצאו נתונים. ודאו שהדבקתם את הגיליון כולל שורת הכותרות.';return;}
+    const headers=rows[0];
+    const idx={
+      fname:colIndex(headers,['שם הילד','הילד/ה','הילד']),
+      lname:colIndex(headers,['שם משפחה','משפחה']),
+      strengths:colIndex(headers,['חוזקות','חוזקה']),
+      dreams:colIndex(headers,['חלומות','חלום']),
+      blessing:colIndex(headers,['ברכה']),
+      photo:colIndex(headers,['תמונה','תמונת','photo']),
+    };
+    if(idx.fname<0){status.textContent='לא זוהתה עמודת "שם הילד/ה". בדקו את שורת הכותרות.';return;}
+    let n=0;
+    for(let r=1;r<rows.length;r++){
+      const row=rows[r];
+      const rec={
+        fname:(row[idx.fname]||'').trim(),
+        lname:idx.lname>-1?(row[idx.lname]||'').trim():'',
+        strengths:idx.strengths>-1?(row[idx.strengths]||'').trim():'',
+        dreams:idx.dreams>-1?(row[idx.dreams]||'').trim():'',
+        blessing:idx.blessing>-1?(row[idx.blessing]||'').trim():'',
+        photo:idx.photo>-1?(row[idx.photo]||'').trim():'',
+      };
+      if(!rec.fname && !rec.strengths && !rec.blessing) continue;
+      rec.photoKey=normName(rec.fname+rec.lname);
+      sheets.appendChild(certificate(rec));
+      n++;
+    }
+    status.textContent='נטענו '+n+' תעודות. אפשר להדפיס / לשמור PDF.';
+    // wait for images/fonts then autofit
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(autofit,60));
+    setTimeout(autofit,400);
+  }
+
+  /* ---------- events ---------- */
+  $('#loadBtn').addEventListener('click',()=>render(parseCSV($('#csvText').value)));
+  $('#csvFile').addEventListener('change',e=>{
+    const f=e.target.files[0]; if(!f)return;
+    const rd=new FileReader();
+    rd.onload=ev=>{ $('#csvText').value=ev.target.result; render(parseCSV(ev.target.result)); };
+    rd.readAsText(f,'utf-8');
+  });
+  $('#imgFiles').addEventListener('change',e=>{
+    const files=[...e.target.files]; let done=0;
+    if(!files.length)return;
+    files.forEach(f=>{
+      const rd=new FileReader();
+      rd.onload=ev=>{
+        // key by filename without extension, normalized (Apps Script names photos fname_lname)
+        const base=f.name.replace(/\.[^.]+$/,'');
+        uploadedImages[normName(base.replace(/[_\-]/g,''))]=ev.target.result;
+        if(++done===files.length){
+          status.textContent='הועלו '+files.length+' תמונות. טוענים מחדש…';
+          if($('#csvText').value.trim()) render(parseCSV($('#csvText').value));
+        }
+      };
+      rd.readAsDataURL(f);
+    });
+  });
+  $('#printBtn').addEventListener('click',()=>window.print());
+})();
+</script>
+
+<style media="print">
+  @page{ size:landscape; margin:0; }
+  .bar{display:none !important}
+  #sheets{padding:0}
+  .cert{width:100%;margin:0}
+  .page{width:100%;height:100vh;border-radius:0;box-shadow:none;break-inside:avoid}
+  .page.cover{page-break-after:always}
+  .page.inside{margin-top:0;page-break-after:always}
+  .cert:last-child .page.inside{page-break-after:auto}
+</style>
+</body>
+</html>
