@@ -283,6 +283,26 @@ body{
 @media(max-width:520px){.row2{grid-template-columns:1fr}}
 .counter{text-align:left;font-size:12px;color:#B7A3DC;margin-top:6px}
 
+/* select (transport station) — matches .input, with a caret */
+select.input{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'><path d='M6 9l6 6 6-6' stroke='%237B3FE4' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat;background-position:left 16px center;background-size:20px;padding-left:46px;
+}
+/* segmented "how do you arrive" control */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.seg{grid-template-columns:1fr}}
+.seg-btn{
+  font-family:'Rubik',sans-serif;font-size:15.5px;font-weight:700;color:var(--ink);cursor:pointer;
+  background:#FAF6FE;border:2px solid #ECE0F8;border-radius:var(--r-sm);padding:15px 14px;
+  transition:border-color .2s,background .2s,color .2s,box-shadow .2s;
+}
+.seg-btn:hover{border-color:#D9C6F2}
+.seg-btn.on{border-color:var(--purple);background:var(--purple);color:#fff;box-shadow:0 8px 20px -8px rgba(123,63,228,.5)}
+.contact-note{font-size:13.5px;color:var(--ink-soft);margin:-4px 0 20px;font-weight:500}
+.contact-note a{color:var(--violet);font-weight:700;text-decoration:none}
+.contact-note a:hover{text-decoration:underline}
+
 /* photo upload */
 .photo-up{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .photo-frame{
@@ -344,7 +364,9 @@ body{
 /* ============ SUCCESS ============ */
 .success{display:none;text-align:center;padding:54px clamp(22px,5vw,46px) 60px}
 .success.show{display:block;animation:fadeUp .6s ease both}
-.success .star-pop{display:block;width:120px;height:auto;margin:0 auto 22px;animation:pop .7s cubic-bezier(.34,1.8,.5,1) both}
+.star-pops{display:flex;justify-content:center;align-items:flex-end;gap:14px;margin-bottom:22px}
+.success .star-pop{display:block;width:104px;height:auto;animation:pop .7s cubic-bezier(.34,1.8,.5,1) both}
+.success .star-pop2{animation-delay:.12s}
 @keyframes pop{from{transform:scale(0) rotate(-25deg)}to{transform:scale(1) rotate(0)}}
 .success h3{font-family:'Varela Round',sans-serif;font-size:clamp(28px,5vw,40px);color:var(--violet);margin-bottom:14px}
 .success p{color:var(--ink-soft);font-size:16.5px;line-height:1.7;max-width:440px;margin:0 auto 8px}
@@ -503,7 +525,7 @@ body{
         <div class="step active" data-step="0"><div class="dot">1</div><div class="step-name">הגיבור/ה שלנו</div></div>
         <div class="step" data-step="1"><div class="dot">2</div><div class="step-name">הברכה שלנו</div></div>
         <div class="step" data-step="2"><div class="dot">3</div><div class="step-name">כוחות וחלומות</div></div>
-        <div class="step" data-step="3"><div class="dot">4</div><div class="step-name">פרטי קשר</div></div>
+        <div class="step" data-step="3"><div class="dot">4</div><div class="step-name">הרשמה לאירוע</div></div>
       </div>
     </div>
 
@@ -614,8 +636,8 @@ body{
       <div class="panel" data-panel="3">
         <div class="panel-head">
           <span class="eyebrow">פרק אחרון</span>
-          <h3 class="display">נשארים בקשר</h3>
-          <p>פרטי ההורה — כדי שנוכל לעדכן אתכם לקראת האירוע</p>
+          <h3 class="display">הרשמה לאירוע</h3>
+          <p>פרטי ההורה, רגישויות והגעה לאירוע</p>
         </div>
         <div class="row2">
           <div class="field">
@@ -639,6 +661,43 @@ body{
           <input class="input" id="email" type="email" placeholder="name@example.com" inputmode="email" autocomplete="email">
           <div class="err" data-err="email">כתובת אימייל לא תקינה</div>
         </div>
+
+        <div class="field">
+          <label for="sensitivities">רגישויות / אלרגיות</label>
+          <input class="input" id="sensitivities" type="text" placeholder="רגישויות למזון, אלרגיות וכו' (לא חובה)" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>איך מגיעים לאירוע? <span class="req">*</span></label>
+          <div class="seg" id="transportSeg">
+            <button type="button" class="seg-btn" data-transport="bus">מגיעים עם ההסעה</button>
+            <button type="button" class="seg-btn" data-transport="self">מגיעים עצמאית</button>
+          </div>
+          <div class="err" data-err="transport">בחרו אפשרות הגעה</div>
+        </div>
+
+        <div id="busDetails" hidden>
+          <div class="field">
+            <label for="busStation">תחנת הסעה <span class="req">*</span></label>
+            <select class="input" id="busStation">
+              <option value="">בחרו תחנה…</option>
+              <option value="נתניה – רחוב הגביש 10, בית סלקום">נתניה – רחוב הגביש 10, בית סלקום</option>
+              <option value="חיפה – נחום חת 1">חיפה – נחום חת 1</option>
+              <option value="טבריה – התבור 7">טבריה – התבור 7</option>
+              <option value="אשדוד – מרכז שירות סלקום, מתחם סטאר סנטר, ז'בוטינסקי 41">אשדוד – מרכז שירות סלקום, מתחם סטאר סנטר, ז'בוטינסקי 41</option>
+              <option value="אשקלון – קניון חוצות, רחוב הנחל 1">אשקלון – קניון חוצות, רחוב הנחל 1</option>
+            </select>
+            <div class="err" data-err="busStation">בחרו תחנת הסעה</div>
+          </div>
+          <div class="field">
+            <label for="busCount">כמות משתתפים בהסעה <span class="req">*</span></label>
+            <input class="input" id="busCount" type="number" min="1" max="30" step="1" inputmode="numeric" placeholder="כמה אתם מגיעים בהסעה?">
+            <div class="err" data-err="busCount">הזינו מספר משתתפים</div>
+          </div>
+        </div>
+
+        <div class="contact-note">לפניות ושאלות: <a href="mailto:RevahaMashotafat@cellcom.co.il">RevahaMashotafat@cellcom.co.il</a></div>
+
         <div class="panel-nav">
           <button class="btn btn-back" data-back><svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> חזרה</button>
           <button class="btn btn-next" id="submitBtn" data-next>סיימנו! שלחו את הסיפור ✨</button>
@@ -649,7 +708,10 @@ body{
 
     <!-- SUCCESS -->
     <div class="success" id="successScreen">
-      <img class="star-pop" src="assets/star.png" alt="">
+      <div class="star-pops">
+        <img class="star-pop" src="assets/star.png" alt="">
+        <img class="star-pop star-pop2" src="assets/star2.png" alt="">
+      </div>
 
       <h3 class="display">הסיפור נשלח בהצלחה!</h3>
       <p>תודה שכתבתם איתנו את הפרק הראשון בסיפור של <span class="kid-name" id="successName">הילד/ה</span>.<br>נתראה ב-3 באוגוסט בספארי לחגיגה גדולה 🎉</p>
@@ -668,7 +730,7 @@ body{
 <div class="confetti" id="confetti" aria-hidden="true"></div>
 
 <footer class="foot">
-  אירוע ילדי כיתות א' · <strong>ארגון עובדי קבוצת סלקום</strong> · סיפור חדש מתחיל
+  אירוע ילדי כיתות א' · <strong>הנהלת החברה ואירגון העובדים</strong> · סיפור חדש מתחיל
 </footer>
 
 <div class="credit">
@@ -749,6 +811,18 @@ body{
       if(!emailOk){showErr('email',true);markInvalid(em,true);ok=false}else{showErr('email',false);markInvalid(em,false)}
       const emp=document.getElementById('employeeId');
       if(!emp.value.trim()){showErr('employee',true);markInvalid(emp,true);ok=false}else{showErr('employee',false);markInvalid(emp,false)}
+      const segOn=document.querySelector('.seg-btn.on');
+      const trans=segOn?segOn.dataset.transport:'';
+      if(!trans){showErr('transport',true);ok=false}
+      else{
+        showErr('transport',false);
+        if(trans==='bus'){
+          const st=document.getElementById('busStation'),bc=document.getElementById('busCount');
+          if(!st.value){showErr('busStation',true);markInvalid(st,true);ok=false}else{showErr('busStation',false);markInvalid(st,false)}
+          const n=parseInt(bc.value,10);
+          if(!(n>=1)){showErr('busCount',true);markInvalid(bc,true);ok=false}else{showErr('busCount',false);markInvalid(bc,false)}
+        }
+      }
     }
     return ok;
   }
@@ -771,12 +845,23 @@ body{
     el.addEventListener('input',()=>{ if(countId) document.getElementById(countId).textContent=el.value.length; el.classList.remove('invalid'); });
   };
   bind('blessing','blessCount'); bind('dreams','dreamCount');
-  ['fname','lname','parent','phone','email','employeeId','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
+  ['fname','lname','parent','phone','email','employeeId','sensitivities','busCount','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
 
   /* ---- strengths chips ---- */
   document.querySelectorAll('.pick').forEach(c=>{
     c.addEventListener('click',()=>{ c.classList.toggle('on'); showErr('strengths',false); });
   });
+
+  /* ---- transport: pick "bus"/"self", show bus details only for bus ---- */
+  const busDetails=document.getElementById('busDetails');
+  document.querySelectorAll('.seg-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.seg-btn').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on'); showErr('transport',false);
+      busDetails.hidden = b.dataset.transport!=='bus';
+    });
+  });
+  document.getElementById('busStation').addEventListener('change',e=>{ e.target.classList.remove('invalid'); showErr('busStation',false); });
 
   /* ---- photo upload ---- */
   const input=document.getElementById('photoInput');
@@ -810,6 +895,12 @@ body{
     const phone=document.getElementById('phone').value.trim();
     const email=document.getElementById('email').value.trim();
     const employeeId=document.getElementById('employeeId').value.trim();
+    const sensitivities=document.getElementById('sensitivities').value.trim();
+    const segOn=document.querySelector('.seg-btn.on');
+    const isBus=segOn&&segOn.dataset.transport==='bus';
+    const transport=segOn?(isBus?'עם ההסעה':'עצמאית'):'';
+    const busStation=isBus?document.getElementById('busStation').value:'';
+    const busCount=isBus?document.getElementById('busCount').value.trim():'';
 
     const payload={
       fname, lname,
@@ -817,6 +908,7 @@ body{
       blessing: bless,
       dreams,
       parent, phone, email, employeeId,
+      sensitivities, transport, busStation, busCount,
       photoData: preview.src || '',
       photoName: (fname+'_'+lname).replace(/\s+/g,'-')
     };

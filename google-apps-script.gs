@@ -14,7 +14,7 @@ const SHEET_ID  = '12QAZxngk4gaiMUVnHyTASRZW-5PhM6namaSnHZRJYyc';
 const FOLDER_ID = '1dyitJA7VKGed4M0bw44_g3QwWEMS11N4';
 
 // כותרות העמודות בגיליון
-const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה','מספר עובד'];
+const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה','מספר עובד','רגישויות','אופן הגעה','תחנת הסעה','כמות בהסעה'];
 
 // פרטי האירוע (מופיעים במייל האישור)
 const EVENT = {
@@ -71,7 +71,11 @@ function doPost(e) {
       "'" + (data.phone || ''),   // הגרש שומר על אפס מוביל בטלפון
       data.email     || '',
       photoUrl,
-      "'" + (data.employeeId || '')   // הגרש שומר על אפס מוביל במספר עובד
+      "'" + (data.employeeId || ''),   // הגרש שומר על אפס מוביל במספר עובד
+      data.sensitivities || '',
+      data.transport     || '',
+      data.busStation    || '',
+      data.busCount      || ''
     ]);
 
     // ----- 3) מייל אישור הרשמה להורה (Resend) -----
