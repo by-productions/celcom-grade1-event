@@ -244,12 +244,19 @@ function setup() {
   // נגיעה ב-Drive: מכריחה את גוגל לבקש הרשאת Drive מלאה
   const folder = DriveApp.getFolderById(FOLDER_ID);
 
-  // יצירת כותרות בגיליון (אם ריק)
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(HEADERS);
-    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
-  }
+  // כתיבה/עדכון של שורת הכותרות תמיד (שורה 1) — בלי לפגוע בנתונים שכבר קיימים למטה
+  updateHeaders();
 
-  Logger.log('✓ הכל מחובר! תיקיית Drive: "' + folder.getName() + '" | גיליון: "' + sheet.getName() + '"');
+  Logger.log('✓ הכל מחובר! תיקיית Drive: "' + folder.getName() + '" | גיליון: "' + SpreadsheetApp.openById(SHEET_ID).getSheets()[0].getName() + '"');
+}
+
+/****************************************************************
+ *  📋 עדכון שורת הכותרות בלבד — הריצי אם הוספתָ עמודות חדשות
+ *  (כותב מחדש את שורה 1 עם כל הכותרות; הנתונים בשורות 2+ נשמרים)
+ ****************************************************************/
+function updateHeaders() {
+  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
+  sheet.setFrozenRows(1);
+  Logger.log('✓ הכותרות עודכנו (' + HEADERS.length + ' עמודות): ' + HEADERS.join(' | '));
 }
