@@ -61,12 +61,15 @@
 
   /* static "משפחת סלקום" letter on the back cover */
   .coverletter{
-    position:absolute;z-index:2;direction:rtl;text-align:right;
-    right:59.3%;width:28.6%;top:26.4%;height:42%;
-    color:#4A1E8C;font-size:1.2cqw;line-height:1.62;font-weight:500;
+    position:absolute;z-index:2;direction:rtl;text-align:right;overflow:hidden;
+    right:59.3%;width:28.6%;top:23.6%;height:45.5%;
+    color:#4A1E8C;font-size:1.0cqw;line-height:1.5;font-weight:500;
   }
-  .coverletter p{margin:0 0 .8em}
+  .coverletter p{margin:0 0 .55em}
   .coverletter p:last-child{margin-bottom:0}
+  .cl-title{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;
+    font-weight:700;font-size:1.3em;color:#E6189C;text-align:center;margin-bottom:.7em;line-height:1.2}
+  .cl-sign{font-weight:700;color:#6322D6;text-align:center;margin-top:.3em}
 
   /* custom name banner — sizes itself to the name (replaces the template ribbon) */
   .nb-wrap{position:absolute;z-index:2;left:1%;width:49%;top:8.7%;text-align:center;direction:rtl}
@@ -132,6 +135,15 @@
   const sheets=$('#sheets'), status=$('#status');
   let uploadedImages={}; // normalizedName -> dataURL
 
+  /* back-cover letter (same for everyone) */
+  const COVER_LETTER=[
+    'אנחנו רגילים לחבר בין אנשים, אבל היום אנחנו חוגגים חיבור מיוחד במינו – את החיבור שלך לעולם חדש של למידה, סקרנות, חברים, חוויות וגילויים.',
+    'המעבר לכיתה א\' הוא צעד גדול ומרגש. זהו הרגע שבו את/ה מתחיל/ה לכתוב פרק חדש בסיפור שלך – פרק מלא בהרפתקאות, הצלחות, למידה וחלומות שמתחילים להתגשם.',
+    'בתוך הספרון הזה תמצא/י את כל הדברים שהופכים אותך למיוחד/ת: החוזקות שלך, החלומות שלך והמילים שהאנשים שאוהבים אותך יותר מכל בחרו לכתוב לך כדי ללוות אותך בדרך.',
+    'כשתפתח/י את הספרון הזה בעוד שנים, אנחנו מקווים שתיזכר/י ביום המיוחד שבו יצאת למסע החדש שלך – עם חיוך, אומץ, סקרנות והמון אמונה בעצמך.',
+    'אנחנו מאחלים לך שנה מלאה בחוויות, חברים טובים, הצלחות קטנות וגדולות, והרבה רגעים של שמחה וגאווה.'
+  ];
+
   /* ---------- CSV parser (RFC-ish: quotes, commas, newlines) ---------- */
   function parseCSV(text){
     text=text.replace(/\r\n?/g,'\n').trim();
@@ -176,12 +188,14 @@
 
     // COVER (static letter for everyone) + tiny employee number
     const cover=document.createElement('div'); cover.className='page cover';
-    cover.innerHTML='<img class="bg" src="assets/cover.jpg" alt="">'+
-      '<div class="coverletter">'+
-      '<p>אנחנו רגילים לחבר בין אנשים, אבל הפעם אנחנו חוגגים חיבור מסוג אחר – החיבור של הילדים שלנו לעולם חדש של למידה, חברים, חוויות וגילויים.</p>'+
-      '<p>המעבר לכיתה א\' הוא רגע משמעותי ומרגש. רגע שבו כל ילד מתחיל לכתוב פרק חדש בסיפור החיים שלו.</p>'+
-      '<p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך החדשה.</p>'+
-      '</div>';
+    cover.innerHTML='<img class="bg" src="assets/cover.jpg" alt="">';
+    const letter=document.createElement('div'); letter.className='coverletter';
+    const clTitle=document.createElement('div'); clTitle.className='cl-title';
+    clTitle.textContent='הפרק החדש שלך מתחיל כאן'; letter.appendChild(clTitle);
+    COVER_LETTER.forEach(function(t){var p=document.createElement('p');p.textContent=t;letter.appendChild(p);});
+    const clSign=document.createElement('p'); clSign.className='cl-sign';
+    clSign.textContent='בהצלחה בכיתה א\' – אנחנו מאמינים בך!'; letter.appendChild(clSign);
+    cover.appendChild(letter);
     if(rec.employeeId){
       const emp=document.createElement('div'); emp.className='empno';
       emp.textContent='מס׳ עובד: '+rec.employeeId; cover.appendChild(emp);
@@ -226,7 +240,7 @@
 
   /* ---------- shrink body text to fit its box (also before printing) ---------- */
   function autofit(){
-    document.querySelectorAll('.b').forEach(el=>{
+    document.querySelectorAll('.b,.coverletter').forEach(el=>{
       el.style.fontSize='';                 // reset to responsive CSS size
       let fs=parseFloat(getComputedStyle(el).fontSize);
       let guard=0;
