@@ -681,6 +681,11 @@ select.input{
         </div>
 
         <div class="field">
+          <label for="kosher">כשרויות מיוחדות</label>
+          <input class="input" id="kosher" type="text" placeholder="כשרות מיוחדת / העדפות אוכל (לא חובה)" autocomplete="off">
+        </div>
+
+        <div class="field">
           <label>איך מגיעים לאירוע? <span class="req">*</span></label>
           <div class="seg" id="transportSeg">
             <button type="button" class="seg-btn" data-transport="bus">מגיעים עם ההסעה</button>
@@ -860,7 +865,7 @@ select.input{
     el.addEventListener('input',()=>{ if(countId) document.getElementById(countId).textContent=el.value.length; el.classList.remove('invalid'); });
   };
   bind('blessing','blessCount'); bind('dreams','dreamCount');
-  ['fname','lname','parent','phone','email','employeeId','sensitivities','busCount','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
+  ['fname','lname','parent','phone','email','employeeId','sensitivities','kosher','busCount','strengthsExtra'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.classList.remove('invalid')));
 
   /* ---- strengths chips ---- */
   document.querySelectorAll('.pick').forEach(c=>{
@@ -911,6 +916,7 @@ select.input{
     const email=document.getElementById('email').value.trim();
     const employeeId=document.getElementById('employeeId').value.trim();
     const sensitivities=document.getElementById('sensitivities').value.trim();
+    const kosher=document.getElementById('kosher').value.trim();
     const segOn=document.querySelector('.seg-btn.on');
     const isBus=segOn&&segOn.dataset.transport==='bus';
     const transport=segOn?(isBus?'עם ההסעה':'עצמאית'):'';
@@ -923,7 +929,7 @@ select.input{
       blessing: bless,
       dreams,
       parent, phone, email, employeeId,
-      sensitivities, transport, busStation, busCount,
+      sensitivities, kosher, transport, busStation, busCount,
       photoData: preview.src || '',
       photoName: (fname+'_'+lname).replace(/\s+/g,'-')
     };

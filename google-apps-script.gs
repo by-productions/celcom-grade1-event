@@ -14,7 +14,7 @@ const SHEET_ID  = '12QAZxngk4gaiMUVnHyTASRZW-5PhM6namaSnHZRJYyc';
 const FOLDER_ID = '1dyitJA7VKGed4M0bw44_g3QwWEMS11N4';
 
 // כותרות העמודות בגיליון
-const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה','מספר עובד','רגישויות','אופן הגעה','תחנת הסעה','כמות בהסעה'];
+const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה','מספר עובד','רגישויות','כשרויות מיוחדות','אופן הגעה','תחנת הסעה','כמות בהסעה'];
 
 // פרטי האירוע (מופיעים במייל האישור)
 const EVENT = {
@@ -85,6 +85,7 @@ function doPost(e) {
       photoUrl,
       "'" + (data.employeeId || ''),   // הגרש שומר על אפס מוביל במספר עובד
       data.sensitivities || '',
+      data.kosher        || '',
       data.transport     || '',
       data.busStation    || '',
       data.busCount      || ''
@@ -205,7 +206,6 @@ function buildEmailHtml(data) {
           '<tr><td align="center" bgcolor="#4A1E8C" style="background:linear-gradient(135deg,#4A1E8C 0%,#7B3FE4 100%);padding:34px 24px 30px">' +
             '<div style="font-family:' + FONT + ';font-size:15px;color:#E9D8FF;letter-spacing:1px;margin-bottom:6px">✦ ✦ ✦</div>' +
             '<div style="font-family:' + FONT_HEAD + ';font-weight:900;font-size:30px;line-height:1.25;color:#FFFFFF">סיפור חדש מתחיל</div>' +
-            '<div style="font-family:' + FONT + ';font-size:15px;color:#FFD9F0;margin-top:6px">חגיגת העלייה לכיתה א\' · ארגון עובדי קבוצת סלקום</div>' +
           '</td></tr>' +
 
           /* ---- body ---- */
