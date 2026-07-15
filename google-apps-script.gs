@@ -43,7 +43,10 @@ function doPost(e) {
 
     // ----- 1) שמירת התמונה ל-Drive -----
     let photoUrl = '';
-    if (data.photoData && data.photoData.indexOf(',') > -1) {
+    // חסם גודל (הגנה מפני ניצול לרעה/מילוי Drive) — ~10MB בקירוב
+    if (data.photoData && data.photoData.length > 14000000) {
+      photoUrl = 'תמונה גדולה מדי';
+    } else if (data.photoData && data.photoData.indexOf(',') > -1) {
       try {
         const parts       = data.photoData.split(',');
         const contentType = (parts[0].match(/data:(.*?);/) || [])[1] || 'image/jpeg';
@@ -129,7 +132,8 @@ function doGet() {
  *  (MailApp), כדי שההורים תמיד יקבלו אישור.
  ****************************************************************/
 function sendConfirmationEmail(data) {
-  if (!data.email) return false;
+  // אימות בסיסי של כתובת המייל — לא שולחים לכתובות לא-תקינות (הגנה מפני ניצול לרעה)
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email)) || String(data.email).length > 254) return false;
 
   const props   = PropertiesService.getScriptProperties();
   const apiKey  = props.getProperty('RESEND_API_KEY');
@@ -170,8 +174,14 @@ function sendConfirmationEmail(data) {
 
 /* בניית גוף המייל — HTML ממותג (עיצוב inline כדי שיעבוד בכל תוכנות המייל) */
 function buildEmailHtml(data) {
-  const kid    = (data.fname || '') + (data.lname ? ' ' + data.lname : '');
-  const parent = data.parent || 'הורים יקרים';
+  // בריחה מ-HTML כדי למנוע הזרקת תגיות/קישורים דרך שדות שהמשתמש ממלא
+  const esc = function (s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  };
+  const kid    = esc((data.fname || '') + (data.lname ? ' ' + data.lname : ''));
+  const parent = esc(data.parent || 'הורים יקרים');
 
   // פונטים של המותג + פולבק נקי לתוכנות מייל שלא טוענות פונטי רשת (Gmail)
   const FONT      = "'Rubik','Segoe UI','Helvetica Neue',Arial,sans-serif";
