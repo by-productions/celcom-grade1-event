@@ -185,7 +185,7 @@ function buildEmailHtml(data) {
 
   // פונטים של המותג + פולבק נקי לתוכנות מייל שלא טוענות פונטי רשת (Gmail)
   const FONT      = "'Rubik','Segoe UI','Helvetica Neue',Arial,sans-serif";
-  const FONT_HEAD = "'Varela Round','Rubik','Segoe UI','Helvetica Neue',Arial,sans-serif";
+  const FONT_HEAD = "'Rubik','Segoe UI','Helvetica Neue',Arial,sans-serif";
 
   const scheduleRows = EVENT.schedule.map(function(row) {
     return '<tr>' +
@@ -195,7 +195,7 @@ function buildEmailHtml(data) {
   }).join('');
 
   return '' +
-  '<style>@import url(https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik:wght@400;500;700;900&display=swap);</style>' +
+  '<style>@import url(https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap);</style>' +
   '<div dir="rtl" style="margin:0;padding:0;background:#F4ECFC">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4ECFC;padding:28px 12px">' +
       '<tr><td align="center">' +
@@ -234,7 +234,7 @@ function buildEmailHtml(data) {
               'יש שאלה? כתבו לנו ל־<a href="mailto:RevahaMashotafat@cellcom.co.il" style="color:#7B3FE4;font-weight:700;text-decoration:none">RevahaMashotafat@cellcom.co.il</a>' +
             '</div>' +
             '<div style="font-size:13px;color:#B7A3DC;margin-top:18px;border-top:1px dashed #E3D2F7;padding-top:14px;text-align:center">' +
-              'נתראה בספארי! 💜 ארגון עובדי קבוצת סלקום' +
+              'נתראה בספארי! 💜' +
             '</div>' +
           '</td></tr>' +
 
