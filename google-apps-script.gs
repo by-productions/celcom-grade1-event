@@ -28,6 +28,15 @@ const EVENT = {
   ]
 };
 
+// גיליון הנתונים = הלשונית הראשונה שאיננה "סיכום" (יציב גם אחרי שנוצרת לשונית הסיכום)
+function getDataSheet() {
+  const sheets = SpreadsheetApp.openById(SHEET_ID).getSheets();
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].getName() !== 'סיכום') return sheets[i];
+  }
+  return sheets[0];
+}
+
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
@@ -55,7 +64,7 @@ function doPost(e) {
     }
 
     // ----- 2) כתיבת שורה לגיליון -----
-    const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+    const sheet = getDataSheet();
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(HEADERS);
       sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
@@ -250,7 +259,7 @@ function setup() {
   // כתיבה/עדכון של שורת הכותרות תמיד (שורה 1) — בלי לפגוע בנתונים שכבר קיימים למטה
   updateHeaders();
 
-  Logger.log('✓ הכל מחובר! תיקיית Drive: "' + folder.getName() + '" | גיליון: "' + SpreadsheetApp.openById(SHEET_ID).getSheets()[0].getName() + '"');
+  Logger.log('✓ הכל מחובר! תיקיית Drive: "' + folder.getName() + '" | גיליון: "' + getDataSheet().getName() + '"');
 }
 
 /****************************************************************
@@ -258,7 +267,7 @@ function setup() {
  *  (כותב מחדש את שורה 1 עם כל הכותרות; הנתונים בשורות 2+ נשמרים)
  ****************************************************************/
 function updateHeaders() {
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  const sheet = getDataSheet();
   sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
   sheet.setFrozenRows(1);
   Logger.log('✓ הכותרות עודכנו (' + HEADERS.length + ' עמודות): ' + HEADERS.join(' | '));
@@ -270,7 +279,7 @@ function updateHeaders() {
  ****************************************************************/
 function updateSummary() {
   const ss   = SpreadsheetApp.openById(SHEET_ID);
-  const data = ss.getSheets()[0];
+  const data = getDataSheet();
   const values = data.getDataRange().getValues();
   if (values.length < 1) return;
 
@@ -311,7 +320,7 @@ function updateSummary() {
   });
 
   let sum = ss.getSheetByName('סיכום');
-  if (!sum) sum = ss.insertSheet('סיכום', 0);
+  if (!sum) sum = ss.insertSheet('סיכום');   // נוספת בסוף — לא מזיזה את גיליון הנתונים
   sum.clear();
   sum.getRange(1, 1, out.length, 3).setValues(out);
   sum.getRange(1, 1, 1, 3).setFontWeight('bold').setFontSize(14);
@@ -325,7 +334,7 @@ function updateSummary() {
  *  ⚠️ פעולה בלתי הפיכה. הריצי רק כשרוצים להתחיל נקי לפני האירוע.
  ****************************************************************/
 function resetData() {
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  const sheet = getDataSheet();
   const last  = sheet.getLastRow();
   if (last > 1) sheet.getRange(2, 1, last - 1, sheet.getLastColumn()).clearContent();
   try { updateSummary(); } catch (e) {}
