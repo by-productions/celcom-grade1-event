@@ -78,7 +78,10 @@ function doPost(e) {
       data.busCount      || ''
     ]);
 
-    // ----- 3) מייל אישור הרשמה להורה (Resend) -----
+    // ----- 3) עדכון לשונית "סיכום" (הסעות/כמויות) — לא חוסם את ההרשמה -----
+    try { updateSummary(); } catch (sumErr) { Logger.log('שגיאה בעדכון סיכום: ' + sumErr); }
+
+    // ----- 4) מייל אישור הרשמה להורה (Resend) -----
     // עטוף ב-try/catch — כשל במייל לעולם לא מפיל את ההרשמה עצמה
     let emailSent = false;
     try {
@@ -209,7 +212,7 @@ function buildEmailHtml(data) {
           '<tr><td style="padding:18px 30px 28px;font-family:' + FONT + '">' +
             '<div style="font-size:14px;line-height:1.75;color:#6A4D9E">' +
               'נשלח אליכם עדכון נוסף לקראת האירוע.<br>' +
-              'יש שאלה? פשוט השיבו למייל הזה ונחזור אליכם.' +
+              'יש שאלה? כתבו לנו ל־<a href="mailto:RevahaMashotafat@cellcom.co.il" style="color:#7B3FE4;font-weight:700;text-decoration:none">RevahaMashotafat@cellcom.co.il</a>' +
             '</div>' +
             '<div style="font-size:13px;color:#B7A3DC;margin-top:18px;border-top:1px dashed #E3D2F7;padding-top:14px;text-align:center">' +
               'נתראה בספארי! 💜 ארגון עובדי קבוצת סלקום' +
@@ -259,4 +262,72 @@ function updateHeaders() {
   sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
   sheet.setFrozenRows(1);
   Logger.log('✓ הכותרות עודכנו (' + HEADERS.length + ' עמודות): ' + HEADERS.join(' | '));
+}
+
+/****************************************************************
+ *  📊 לשונית "סיכום" — כמה מגיעים בהסעה, מאיפה וכמה משתתפים
+ *  מתעדכנת אוטומטית בכל הרשמה; אפשר גם להריץ ידנית.
+ ****************************************************************/
+function updateSummary() {
+  const ss   = SpreadsheetApp.openById(SHEET_ID);
+  const data = ss.getSheets()[0];
+  const values = data.getDataRange().getValues();
+  if (values.length < 1) return;
+
+  const header = values[0];
+  const iTransport = header.indexOf('אופן הגעה');
+  const iStation   = header.indexOf('תחנת הסעה');
+  const iCount     = header.indexOf('כמות בהסעה');
+  const rows = values.slice(1).filter(function(r){ return r.join('') !== ''; });
+
+  let self = 0, bus = 0, busPeople = 0;
+  const byStation = {};   // תחנה -> {families, people}
+  rows.forEach(function(r){
+    const t = iTransport > -1 ? r[iTransport] : '';
+    if (t === 'עם ההסעה') {
+      bus++;
+      const st = (iStation > -1 && r[iStation]) ? r[iStation] : '(ללא תחנה)';
+      const c  = iCount > -1 ? (parseInt(String(r[iCount]).replace(/\D/g, ''), 10) || 0) : 0;
+      busPeople += c;
+      if (!byStation[st]) byStation[st] = { families: 0, people: 0 };
+      byStation[st].families++;
+      byStation[st].people += c;
+    } else if (t === 'עצמאית') {
+      self++;
+    }
+  });
+
+  const out = [
+    ['סיכום הרשמות', '', ''],
+    ['סה"כ נרשמים', rows.length, ''],
+    ['מגיעים עצמאית', self, ''],
+    ['מגיעים עם ההסעה', bus, ''],
+    ['סה"כ משתתפים בהסעות', busPeople, ''],
+    ['', '', ''],
+    ['תחנת הסעה', 'מס\' רישומים', 'סה"כ משתתפים']
+  ];
+  Object.keys(byStation).sort().forEach(function(st){
+    out.push([st, byStation[st].families, byStation[st].people]);
+  });
+
+  let sum = ss.getSheetByName('סיכום');
+  if (!sum) sum = ss.insertSheet('סיכום', 0);
+  sum.clear();
+  sum.getRange(1, 1, out.length, 3).setValues(out);
+  sum.getRange(1, 1, 1, 3).setFontWeight('bold').setFontSize(14);
+  sum.getRange(7, 1, 1, 3).setFontWeight('bold').setBackground('#EDE7FB');
+  sum.setColumnWidth(1, 340);
+  Logger.log('✓ לשונית "סיכום" עודכנה. הסעה: ' + bus + ' | עצמאית: ' + self + ' | משתתפים בהסעה: ' + busPeople);
+}
+
+/****************************************************************
+ *  🧹 איפוס נתוני בדיקה — מוחק את כל שורות הנתונים (הכותרות נשמרות)
+ *  ⚠️ פעולה בלתי הפיכה. הריצי רק כשרוצים להתחיל נקי לפני האירוע.
+ ****************************************************************/
+function resetData() {
+  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  const last  = sheet.getLastRow();
+  if (last > 1) sheet.getRange(2, 1, last - 1, sheet.getLastColumn()).clearContent();
+  try { updateSummary(); } catch (e) {}
+  Logger.log('✓ נמחקו ' + Math.max(0, last - 1) + ' שורות נתונים (הכותרות נשמרו). התמונות ב-Drive לא נמחקו.');
 }
