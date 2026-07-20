@@ -340,6 +340,43 @@ function updateSummary() {
 }
 
 /****************************************************************
+ *  🩺 אבחון גיליון — כמה לשוניות/שורות/עמודות יש בפועל
+ *  שימושי כשהגיליון נטען לאט: מריצים כאן (לא בדפדפן) ורואים ב-Execution log.
+ ****************************************************************/
+function diagnose() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheets = ss.getSheets();
+  let out = 'מספר לשוניות: ' + sheets.length + '\n';
+  sheets.forEach(function (s) {
+    out += '• "' + s.getName() + '" — נתונים: ' + s.getLastRow() + ' שורות × ' + s.getLastColumn() +
+           ' עמודות | גודל הגיליון בפועל: ' + s.getMaxRows() + ' × ' + s.getMaxColumns() + '\n';
+  });
+  Logger.log(out);
+  return out;
+}
+
+/****************************************************************
+ *  ✂️ ניקוי שורות/עמודות ריקות מיותרות — מאיץ טעינה של גיליון כבד
+ *  (משאיר מרווח של 200 שורות פנויות להרשמות חדשות)
+ ****************************************************************/
+function trimSheet() {
+  const s = getDataSheet();
+  const lastRow = Math.max(s.getLastRow(), 1);
+  const lastCol = Math.max(s.getLastColumn(), 1);
+  const keepRows = lastRow + 200;
+  let removedRows = 0, removedCols = 0;
+  if (s.getMaxRows() > keepRows) {
+    removedRows = s.getMaxRows() - keepRows;
+    s.deleteRows(keepRows + 1, removedRows);
+  }
+  if (s.getMaxColumns() > lastCol) {
+    removedCols = s.getMaxColumns() - lastCol;
+    s.deleteColumns(lastCol + 1, removedCols);
+  }
+  Logger.log('✓ "' + s.getName() + '": נמחקו ' + removedRows + ' שורות ריקות ו-' + removedCols + ' עמודות ריקות');
+}
+
+/****************************************************************
  *  🧹 איפוס נתוני בדיקה — מוחק את כל שורות הנתונים (הכותרות נשמרות)
  *  ⚠️ פעולה בלתי הפיכה. הריצי רק כשרוצים להתחיל נקי לפני האירוע.
  ****************************************************************/
