@@ -55,9 +55,13 @@
   /* photo — clipped to the exact (smooth) green frame opening */
   .photo{
     position:absolute;left:54.5%;top:14.85%;width:37.35%;height:73.76%;
-    object-fit:cover;z-index:1;background:#efe8fb;
+    object-fit:cover;object-position:50% 22%;   /* ברירת מחדל: נוטה למעלה כדי לא לחתוך פנים */
+    z-index:1;background:#efe8fb;
     clip-path:url(#frame);
+    cursor:grab;
   }
+  .photo:active{cursor:grabbing}
+  @media print{.photo{cursor:default}}
 
   /* static "משפחת סלקום" letter on the back cover */
   .coverletter{
@@ -124,7 +128,8 @@
   </div>
   <textarea id="csvText" placeholder="הדביקו כאן את תוכן ה-CSV (כולל שורת הכותרות)…"></textarea>
   <div class="status" id="status"></div>
-  <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.</div>
+  <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.<br>
+    💡 תמונה יוצאת חתוכה? <b>גררו אותה עם העכבר</b> בתוך המסגרת כדי למקם אותה נכון (דאבל-קליק = איפוס). המיקום נשמר גם בהדפסה.</div>
 </div>
 
 <div id="sheets"></div>
@@ -217,6 +222,7 @@
     else if(rec.photo) src=driveThumb(rec.photo);
     if(src){ img.src=src; img.referrerPolicy='no-referrer'; }
     else { img.classList.add('empty'); }
+    makePhotoDraggable(img);
     inside.appendChild(img);
 
     inside.appendChild(bannerEl('על '+name));
@@ -227,6 +233,26 @@
     wrap.appendChild(inside);
     return wrap;
   }
+  /* גרירת התמונה במסגרת — לתיקון תמונות שנחתכות רע (ראש חתוך וכו') */
+  function makePhotoDraggable(img){
+    let dragging=false, sx=0, sy=0, px=50, py=22;
+    img.style.objectPosition='50% 22%';
+    img.addEventListener('mousedown',e=>{
+      dragging=true; sx=e.clientX; sy=e.clientY;
+      const cur=(img.style.objectPosition||'50% 22%').split(/\s+/);
+      px=parseFloat(cur[0])||50; py=parseFloat(cur[1])||22;
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove',e=>{
+      if(!dragging) return;
+      const nx=Math.max(0,Math.min(100, px - (e.clientX-sx)/img.clientWidth*100));
+      const ny=Math.max(0,Math.min(100, py - (e.clientY-sy)/img.clientHeight*100));
+      img.style.objectPosition=nx.toFixed(1)+'% '+ny.toFixed(1)+'%';
+    });
+    window.addEventListener('mouseup',()=>{ dragging=false; });
+    img.addEventListener('dblclick',()=>{ img.style.objectPosition='50% 22%'; });  /* איפוס */
+  }
+
   function bannerEl(text){
     const w=document.createElement('div'); w.className='nb-wrap';
     const b=document.createElement('div'); b.className='nb'; b.textContent=text;
