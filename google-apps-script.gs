@@ -476,15 +476,17 @@ function _px(fit, box) { return { L: fit.x + box.l * fit.w, T: fit.y + box.t * f
 function _certText(slide, fit, box, opts) {
   opts = opts || {};
   const p = _px(fit, box);
-  const sh = slide.insertTextBox(opts.text || '', p.L, p.T, p.W, p.H);
+  const sh = slide.insertTextBox(opts.text || ' ', p.L, p.T, p.W, p.H);   // לעולם לא ריק
   try { sh.getBorder().setTransparent(); } catch (e) {}
   const t = sh.getText();
-  t.getParagraphs().forEach(function (par) {
-    par.getRange().getParagraphStyle().setParagraphAlignment(opts.align || SlidesApp.ParagraphAlignment.END);
-  });
-  const st = t.getTextStyle();
-  st.setFontFamily(opts.font || 'Rubik').setForegroundColor(opts.color || CERT_C.body).setFontSize(opts.size || (0.024 * fit.h));
-  if (opts.bold) st.setBold(true);
+  if (t.asString().length > 0) {
+    t.getParagraphs().forEach(function (par) {
+      par.getRange().getParagraphStyle().setParagraphAlignment(opts.align || SlidesApp.ParagraphAlignment.END);
+    });
+    const st = t.getTextStyle();
+    st.setFontFamily(opts.font || 'Rubik').setForegroundColor(opts.color || CERT_C.body).setFontSize(opts.size || (0.024 * fit.h));
+    if (opts.bold) st.setBold(true);
+  }
   try { sh.setContentAlignment(opts.valign || SlidesApp.ContentAlignment.TOP); } catch (e) {}
   return sh;
 }
@@ -492,9 +494,9 @@ function _certText(slide, fit, box, opts) {
 function _certCover(pres, fit, coverBlob, rec) {
   const s = pres.appendSlide(SlidesApp.PredefinedLayout.BLANK);
   s.insertImage(coverBlob, fit.x, fit.y, fit.w, fit.h);
-  const box = _certText(s, fit, CERT_L.letter, { text: '', color: CERT_C.letter, size: 0.017 * fit.h });
+  const letterText = 'הפרק החדש שלך מתחיל כאן\n' + COVER_LETTER.join('\n\n') + '\n\nבהצלחה בכיתה א׳ – אנחנו מאמינים בך!';
+  const box = _certText(s, fit, CERT_L.letter, { text: letterText, color: CERT_C.letter, size: 0.017 * fit.h });
   const t = box.getText();
-  t.setText('הפרק החדש שלך מתחיל כאן\n' + COVER_LETTER.join('\n\n') + '\n\nבהצלחה בכיתה א׳ – אנחנו מאמינים בך!');
   const paras = t.getParagraphs();
   paras[0].getRange().getParagraphStyle().setParagraphAlignment(SlidesApp.ParagraphAlignment.CENTER);
   paras[0].getRange().getTextStyle().setBold(true).setForegroundColor(CERT_C.pink).setFontSize(0.023 * fit.h).setFontFamily('Varela Round');
