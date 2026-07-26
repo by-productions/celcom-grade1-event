@@ -387,3 +387,160 @@ function resetData() {
   try { updateSummary(); } catch (e) {}
   Logger.log('✓ נמחקו ' + Math.max(0, last - 1) + ' שורות נתונים (הכותרות נשמרו). התמונות ב-Drive לא נמחקו.');
 }
+
+/****************************************************************
+ *  🖼️ מחולל מצגת Google Slides — כל התעודות במצגת אחת, ניתנת לעריכה
+ *  ----------------------------------------------------------------
+ *  buildCertificatesSlides()   — מוסיף רק נרשמים חדשים (שומר עריכות ידניות שכבר עשית).
+ *  rebuildCertificatesSlides() — בונה מצגת חדשה מאפס לכל הנרשמים.
+ *
+ *  כל ילד = 2 שקופיות (כריכה + פנים). הטקסט אמיתי וניתן לעריכה ישירות ב-Slides.
+ *  התמונה מוכנסת מאחורי "חור הענן" — אפשר להזיז/לחתוך אותה ב-Slides והיא נשארת בצורת ענן.
+ *  הרצה ראשונה תבקש הרשאות ל-Slides + Drive.
+ ****************************************************************/
+const SLIDES_ASSETS = 'https://raw.githubusercontent.com/by-productions/celcom-grade1-event/main/certificates/assets/';
+
+// מיקומים ביחס לתבנית (שברים של 2000×1414) — כאן מכווננים אם צריך
+const CERT_L = {
+  photo:  { l: 0.545, t: 0.1485, w: 0.3735, h: 0.7376 },
+  banner: { l: 0.150, t: 0.082,  w: 0.225,  h: 0.078 },
+  sec1:   { l: 0.121, t: 0.250,  w: 0.278,  h: 0.155 },
+  sec2:   { l: 0.121, t: 0.430,  w: 0.278,  h: 0.155 },
+  sec3:   { l: 0.121, t: 0.610,  w: 0.278,  h: 0.165 },
+  letter: { l: 0.121, t: 0.232,  w: 0.286,  h: 0.460 },
+  emp:    { l: 0.194, t: 0.826,  w: 0.142,  h: 0.080 }
+};
+const CERT_C = { pink: '#E6189C', purple: '#7B3FE4', purple2: '#6322D6', body: '#5B4A8E', white: '#FFFFFF', letter: '#4A1E8C', lav: '#EFE8FB' };
+
+function rebuildCertificatesSlides() { return _certSlides(true); }
+function buildCertificatesSlides()   { return _certSlides(false); }
+
+function _certSlides(fresh) {
+  const props  = PropertiesService.getScriptProperties();
+  const data   = getDataSheet();
+  const values = data.getDataRange().getValues();
+  const header = values[0];
+  const idx = function (n) { return header.indexOf(n); };
+  const iF = idx('שם הילד/ה'), iS = idx('חוזקות'), iD = idx('חלומות'),
+        iB = idx('ברכה אישית'), iP = idx('תמונה'), iE = idx('מספר עובד');
+
+  let pres, startRow;
+  const savedId = props.getProperty('SLIDES_ID');
+  if (!fresh && savedId) { try { pres = SlidesApp.openById(savedId); } catch (e) { pres = null; } }
+  if (fresh || !pres) {
+    pres = SlidesApp.create('תעודות · סיפור חדש מתחיל');
+    try { pres.getSlides()[0].remove(); } catch (e) {}
+    props.setProperty('SLIDES_ID', pres.getId());
+    startRow = 1;
+  } else {
+    startRow = parseInt(props.getProperty('SLIDES_LAST_ROW') || '1', 10);
+  }
+
+  const coverBlob = UrlFetchApp.fetch(SLIDES_ASSETS + 'cover.jpg').getBlob();
+  const holeBlob  = UrlFetchApp.fetch(SLIDES_ASSETS + 'inside-hole.png').getBlob();
+  const fit = _certFit(pres);
+
+  let added = 0;
+  for (let r = Math.max(startRow, 1); r < values.length; r++) {
+    const row = values[r];
+    if (String(row.join('')).trim() === '') continue;
+    const rec = {
+      fname:     (row[iF] || '').toString().trim(),
+      strengths: iS > -1 ? (row[iS] || '').toString().trim() : '',
+      dreams:    iD > -1 ? (row[iD] || '').toString().trim() : '',
+      blessing:  iB > -1 ? (row[iB] || '').toString().trim() : '',
+      photo:     iP > -1 ? (row[iP] || '').toString().trim() : '',
+      emp:       iE > -1 ? (row[iE] || '').toString().replace(/^'/, '').trim() : ''
+    };
+    if (!rec.fname && !rec.strengths && !rec.blessing) continue;
+    _certCover(pres, fit, coverBlob, rec);
+    _certInside(pres, fit, holeBlob, rec);
+    added++;
+  }
+  props.setProperty('SLIDES_LAST_ROW', String(values.length));
+  const msg = '✓ המצגת מוכנה (' + added + ' תעודות חדשות). קישור: ' + pres.getUrl();
+  Logger.log(msg);
+  return msg;
+}
+
+// מלבן התבנית בתוך השקופית (שומר יחס 2000:1414, ממורכז)
+function _certFit(pres) {
+  const W = pres.getPageWidth(), H = pres.getPageHeight(), R = 2000 / 1414;
+  let w = W, h = W / R;
+  if (h > H) { h = H; w = H * R; }
+  return { x: (W - w) / 2, y: (H - h) / 2, w: w, h: h, W: W, H: H };
+}
+function _px(fit, box) { return { L: fit.x + box.l * fit.w, T: fit.y + box.t * fit.h, W: box.w * fit.w, H: box.h * fit.h }; }
+
+// תיבת טקסט (ללא מסגרת), מיושרת לימין כברירת מחדל
+function _certText(slide, fit, box, opts) {
+  opts = opts || {};
+  const p = _px(fit, box);
+  const sh = slide.insertTextBox(opts.text || '', p.L, p.T, p.W, p.H);
+  try { sh.getBorder().setTransparent(); } catch (e) {}
+  const t = sh.getText();
+  t.getParagraphs().forEach(function (par) {
+    par.getRange().getParagraphStyle().setParagraphAlignment(opts.align || SlidesApp.ParagraphAlignment.END);
+  });
+  const st = t.getTextStyle();
+  st.setFontFamily(opts.font || 'Rubik').setForegroundColor(opts.color || CERT_C.body).setFontSize(opts.size || (0.024 * fit.h));
+  if (opts.bold) st.setBold(true);
+  try { sh.setContentAlignment(opts.valign || SlidesApp.ContentAlignment.TOP); } catch (e) {}
+  return sh;
+}
+
+function _certCover(pres, fit, coverBlob, rec) {
+  const s = pres.appendSlide(SlidesApp.PredefinedLayout.BLANK);
+  s.insertImage(coverBlob, fit.x, fit.y, fit.w, fit.h);
+  const box = _certText(s, fit, CERT_L.letter, { text: '', color: CERT_C.letter, size: 0.017 * fit.h });
+  const t = box.getText();
+  t.setText('הפרק החדש שלך מתחיל כאן\n' + COVER_LETTER.join('\n\n') + '\n\nבהצלחה בכיתה א׳ – אנחנו מאמינים בך!');
+  const paras = t.getParagraphs();
+  paras[0].getRange().getParagraphStyle().setParagraphAlignment(SlidesApp.ParagraphAlignment.CENTER);
+  paras[0].getRange().getTextStyle().setBold(true).setForegroundColor(CERT_C.pink).setFontSize(0.023 * fit.h).setFontFamily('Varela Round');
+  const lastP = paras[paras.length - 1];
+  lastP.getRange().getParagraphStyle().setParagraphAlignment(SlidesApp.ParagraphAlignment.CENTER);
+  lastP.getRange().getTextStyle().setBold(true).setForegroundColor(CERT_C.purple2);
+  if (rec.emp) {
+    const e = _certText(s, fit, CERT_L.emp, { text: 'מספר עובד\n' + rec.emp, color: CERT_C.purple2, size: 0.014 * fit.h,
+      align: SlidesApp.ParagraphAlignment.CENTER, valign: SlidesApp.ContentAlignment.MIDDLE });
+    e.getText().getParagraphs()[1].getRange().getTextStyle().setBold(true).setFontSize(0.017 * fit.h);
+  }
+}
+
+function _certInside(pres, fit, holeBlob, rec) {
+  const s = pres.appendSlide(SlidesApp.PredefinedLayout.BLANK);
+  const cb = _px(fit, CERT_L.photo);
+  const bg = s.insertShape(SlidesApp.ShapeType.RECTANGLE, cb.L, cb.T, cb.W, cb.H);
+  bg.getFill().setSolidFill(CERT_C.lav); try { bg.getBorder().setTransparent(); } catch (e) {}
+  const blob = _certPhotoBlob(rec.photo);
+  if (blob) {
+    try {
+      const img = s.insertImage(blob);
+      const nW = img.getWidth(), nH = img.getHeight();
+      const sc = Math.max(cb.W / nW, cb.H / nH);
+      const w = nW * sc, h = nH * sc;
+      img.setWidth(w).setHeight(h).setLeft(cb.L + (cb.W - w) / 2).setTop(cb.T + (cb.H - h) * 0.28);
+    } catch (e) { Logger.log('תמונה נכשלה: ' + e); }
+  }
+  s.insertImage(holeBlob, fit.x, fit.y, fit.w, fit.h);
+  _certText(s, fit, CERT_L.banner, { text: 'על ' + rec.fname, color: CERT_C.white, font: 'Varela Round',
+    bold: true, size: 0.037 * fit.h, align: SlidesApp.ParagraphAlignment.CENTER, valign: SlidesApp.ContentAlignment.MIDDLE });
+  _certSection(s, fit, CERT_L.sec1, 'החוזקות של ' + rec.fname, rec.strengths, CERT_C.pink);
+  _certSection(s, fit, CERT_L.sec2, 'החלומות של ' + rec.fname, rec.dreams,   CERT_C.purple);
+  _certSection(s, fit, CERT_L.sec3, 'הברכה שלנו',              rec.blessing,  CERT_C.pink);
+}
+
+function _certSection(slide, fit, box, head, body, headColor) {
+  const sh = _certText(slide, fit, box, { text: head + '\n' + body, color: CERT_C.body, size: 0.023 * fit.h });
+  const paras = sh.getText().getParagraphs();
+  paras[0].getRange().getTextStyle().setBold(true).setForegroundColor(headColor).setFontSize(0.030 * fit.h).setFontFamily('Varela Round');
+  return sh;
+}
+
+function _certPhotoBlob(url) {
+  if (!url) return null;
+  const m = String(url).match(/[-\w]{25,}/);
+  if (!m) return null;
+  try { return DriveApp.getFileById(m[0]).getBlob(); } catch (e) { Logger.log('Drive: ' + e); return null; }
+}
