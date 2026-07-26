@@ -52,15 +52,19 @@
   .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 
   /* photo on the inside right-page frame */
-  /* photo — clipped to the exact (smooth) green frame opening */
+  /* photo frame: container clips to the smooth opening; inner <img> pans + zooms freely */
   .photo{
     position:absolute;left:54.5%;top:14.85%;width:37.35%;height:73.76%;
-    object-fit:cover;object-position:50% 22%;   /* ברירת מחדל: נוטה למעלה כדי לא לחתוך פנים */
-    z-index:1;background:#efe8fb;
+    z-index:1;background:#efe8fb;overflow:hidden;
     clip-path:url(#frame);
     cursor:grab;
   }
   .photo:active{cursor:grabbing}
+  .photo img{
+    width:100%;height:100%;object-fit:cover;object-position:50% 22%;  /* ברירת מחדל: נוטה למעלה */
+    display:block;transform-origin:center center;will-change:transform;
+    pointer-events:none;user-select:none;-webkit-user-drag:none;
+  }
   @media print{.photo{cursor:default}}
 
   /* static "משפחת סלקום" letter on the back cover */
@@ -129,7 +133,7 @@
   <textarea id="csvText" placeholder="הדביקו כאן את תוכן ה-CSV (כולל שורת הכותרות)…"></textarea>
   <div class="status" id="status"></div>
   <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.<br>
-    💡 תמונה יוצאת חתוכה? <b>גררו אותה עם העכבר</b> בתוך המסגרת כדי למקם אותה נכון (דאבל-קליק = איפוס). המיקום נשמר גם בהדפסה.</div>
+    💡 תמונה יוצאת חתוכה? <b>גררו אותה עם העכבר</b> כדי להזיז, ו<b>גלגלת העכבר</b> כדי להגדיל/להקטין. דאבל-קליק = איפוס. המיקום והזום נשמרים גם בהדפסה.</div>
 </div>
 
 <div id="sheets"></div>
@@ -215,15 +219,17 @@
     const bg=document.createElement('img'); bg.className='bg'; bg.src='assets/inside-blank.png'; bg.alt=''; inside.appendChild(bg);
 
     const name=rec.fname||'';
-    // photo
-    const img=document.createElement('img'); img.className='photo'; img.alt='';
+    // photo — frame container + inner image (pan with drag, zoom with wheel)
+    const frame=document.createElement('div'); frame.className='photo';
     let src='';
     if(rec.photoKey && uploadedImages[rec.photoKey]) src=uploadedImages[rec.photoKey];
     else if(rec.photo) src=driveThumb(rec.photo);
-    if(src){ img.src=src; img.referrerPolicy='no-referrer'; }
-    else { img.classList.add('empty'); }
-    makePhotoDraggable(img);
-    inside.appendChild(img);
+    if(src){
+      const img=document.createElement('img'); img.alt=''; img.referrerPolicy='no-referrer'; img.draggable=false;
+      img.src=src; frame.appendChild(img);
+      makePhotoAdjustable(frame, img);
+    }
+    inside.appendChild(frame);
 
     inside.appendChild(bannerEl('על '+name));
     inside.appendChild(section('sec1','h1','u1','החוזקות של '+name, rec.strengths));
@@ -233,24 +239,27 @@
     wrap.appendChild(inside);
     return wrap;
   }
-  /* גרירת התמונה במסגרת — לתיקון תמונות שנחתכות רע (ראש חתוך וכו') */
-  function makePhotoDraggable(img){
-    let dragging=false, sx=0, sy=0, px=50, py=22;
-    img.style.objectPosition='50% 22%';
-    img.addEventListener('mousedown',e=>{
-      dragging=true; sx=e.clientX; sy=e.clientY;
-      const cur=(img.style.objectPosition||'50% 22%').split(/\s+/);
-      px=parseFloat(cur[0])||50; py=parseFloat(cur[1])||22;
-      e.preventDefault();
-    });
+  /* התאמת התמונה במסגרת: גרירה להזזה + גלגלת להגדלה/הקטנה.
+     המיקום/הזום נשמרים ביחס לגודל המסגרת (%) כדי להישאר נכונים גם בהדפסה. */
+  function makePhotoAdjustable(frame, img){
+    let s=1, tx=0, ty=0;                 // scale, translateX%, translateY%
+    let dragging=false, sx=0, sy=0, ox=0, oy=0;
+    const apply=()=>{ img.style.transform='translate('+tx.toFixed(2)+'%,'+ty.toFixed(2)+'%) scale('+s.toFixed(3)+')'; };
+    frame.addEventListener('mousedown',e=>{ dragging=true; sx=e.clientX; sy=e.clientY; ox=tx; oy=ty; e.preventDefault(); });
     window.addEventListener('mousemove',e=>{
       if(!dragging) return;
-      const nx=Math.max(0,Math.min(100, px - (e.clientX-sx)/img.clientWidth*100));
-      const ny=Math.max(0,Math.min(100, py - (e.clientY-sy)/img.clientHeight*100));
-      img.style.objectPosition=nx.toFixed(1)+'% '+ny.toFixed(1)+'%';
+      tx=ox+(e.clientX-sx)/frame.clientWidth*100;
+      ty=oy+(e.clientY-sy)/frame.clientHeight*100;
+      apply();
     });
     window.addEventListener('mouseup',()=>{ dragging=false; });
-    img.addEventListener('dblclick',()=>{ img.style.objectPosition='50% 22%'; });  /* איפוס */
+    frame.addEventListener('wheel',e=>{
+      e.preventDefault();
+      s=Math.min(5, Math.max(0.4, s*(e.deltaY<0?1.08:1/1.08)));
+      apply();
+    },{passive:false});
+    frame.addEventListener('dblclick',()=>{ s=1; tx=0; ty=0; apply(); });  // איפוס
+    apply();
   }
 
   function bannerEl(text){
