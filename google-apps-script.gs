@@ -13,6 +13,10 @@ const SHEET_ID  = '12QAZxngk4gaiMUVnHyTASRZW-5PhM6namaSnHZRJYyc';
 // תיקיית האחסון שלך ב-Google Drive
 const FOLDER_ID = '1dyitJA7VKGed4M0bw44_g3QwWEMS11N4';
 
+// ⛔ סגירת הרשמה: true = השרת דוחה כל הרשמה חדשה ("ההרשמה הסתיימה").
+// כדי לפתוח מחדש — שני ל-false ופרסמי גרסה חדשה (Deploy ▸ Manage deployments ▸ Edit ▸ New version).
+const REGISTRATION_CLOSED = true;
+
 // כותרות העמודות בגיליון
 const HEADERS = ['תאריך ושעה','שם הילד/ה','שם משפחה','חוזקות','ברכה אישית','חלומות','שם ההורה','טלפון','אימייל','תמונה','מספר עובד','רגישויות','כשרויות מיוחדות','אופן הגעה','תחנת הסעה','כמות בהסעה'];
 
@@ -39,6 +43,13 @@ function getDataSheet() {
 
 function doPost(e) {
   try {
+    // ⛔ ההרשמה סגורה — דוחים את הבקשה בלי לכתוב כלום לגיליון
+    if (REGISTRATION_CLOSED) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ ok: false, closed: true, error: 'ההרשמה הסתיימה' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     const data = JSON.parse(e.postData.contents);
 
     // ----- 1) שמירת התמונה ל-Drive -----

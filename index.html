@@ -505,7 +505,7 @@ select.input{
     <p>המעבר לכיתה א' הוא רגע משמעותי ומרגש. רגע שבו כל ילד מתחיל לכתוב <strong>פרק חדש</strong> בסיפור החיים שלו.</p>
     <p>כדי להפוך את היום הזה לבלתי נשכח, נשמח שתשתפו אותנו בכמה מילים על הילד או הילדה שלכם – החוזקות שמאפיינות אותם, החלומות שלהם והברכה שתרצו ללוות אותם איתה בדרך חדשה.</p>
     <p>את הדברים שתכתבו, יחד עם התמונה שתשלחו, נעצב לברכה חגיגית ומרגשת, שתוענק לכם כמזכרת ביום האירוע.</p>
-    <p>נשמח אם תמלאו את הטופס באמצעות הקישור המצורף עד לתאריך <strong>21.07</strong>, כדי שנוכל להכין את הברכה בזמן.</p>
+    <p id="deadlineNote">נשמח אם תמלאו את הטופס באמצעות הקישור המצורף עד לתאריך <strong>21.07</strong>, כדי שנוכל להכין את הברכה בזמן.</p>
   </section>
 
   <button class="cta-hero display" onclick="document.getElementById('formTop').scrollIntoView()">
@@ -726,6 +726,17 @@ select.input{
 
     </div>
 
+    <!-- CLOSED — מוצג במקום הטופס כש-REGISTRATION_CLOSED פעיל -->
+    <div class="success" id="closedScreen">
+      <div class="star-pops">
+        <img class="star-pop" src="assets/star.png" alt="">
+        <img class="star-pop star-pop2" src="assets/star2.png" alt="">
+      </div>
+      <h3 class="display">ההרשמה הסתיימה</h3>
+      <p>תודה רבה לכל המשפחות שנרשמו! 💜<br>אנחנו כבר עובדים על הברכות והמזכרות —<br>נתראה ב-<strong>3 באוגוסט בספארי</strong> לחגיגה גדולה 🎉</p>
+      <p style="margin-top:14px">יש שאלה? כתבו לנו ל־<a href="mailto:RevahaMashotafat@cellcom.co.il" style="color:#7B3FE4;font-weight:700;text-decoration:none">RevahaMashotafat@cellcom.co.il</a></p>
+    </div>
+
     <!-- SUCCESS -->
     <div class="success" id="successScreen">
       <div class="star-pops">
@@ -770,9 +781,23 @@ select.input{
      הדביקי כאן את הכתובת שתקבלי (מסתיימת ב-/exec):
   ========================================================= */
   const CONFIG = {
-    SCRIPT_URL: "https://script.google.com/macros/s/AKfycbx0_spSLkYJAxzxwuAulDiOGIq-OP2DB6QNg4AiPl5o6QQiLvvej8hfEDQqWE8wYaDUfQ/exec"
+    SCRIPT_URL: "https://script.google.com/macros/s/AKfycbx0_spSLkYJAxzxwuAulDiOGIq-OP2DB6QNg4AiPl5o6QQiLvvej8hfEDQqWE8wYaDUfQ/exec",
+    /* ⛔ סגירת הרשמה: true = הטופס מוחלף בהודעת "ההרשמה הסתיימה".
+       כדי לפתוח מחדש — שני ל-false (וגם ב-google-apps-script.gs). */
+    REGISTRATION_CLOSED: true
   };
   /* ========================================================= */
+
+  /* ---- מצב "ההרשמה הסתיימה" ---- */
+  if(CONFIG.REGISTRATION_CLOSED){
+    document.querySelector('.progress').style.display='none';
+    document.querySelector('.panels').style.display='none';
+    document.getElementById('closedScreen').classList.add('show');
+    const cta=document.querySelector('.cta-hero');
+    if(cta) cta.style.display='none';
+    const note=document.getElementById('deadlineNote');
+    if(note) note.innerHTML='<strong>ההרשמה לאירוע הסתיימה.</strong> תודה רבה לכל מי שנרשם — נתראה בספארי! 💜';
+  }
 
   const panels=[...document.querySelectorAll('.panel')];
   const steps=[...document.querySelectorAll('.step')];
@@ -904,6 +929,7 @@ select.input{
 
   /* ---- submit / success ---- */
   async function submitForm(){
+    if(CONFIG.REGISTRATION_CLOSED) return;   /* הגנה נוספת — לא שולחים כשההרשמה סגורה */
     const fname=document.getElementById('fname').value.trim();
     const lname=document.getElementById('lname').value.trim();
     const strengths=[...document.querySelectorAll('.pick.on')].map(c=>c.dataset.val);

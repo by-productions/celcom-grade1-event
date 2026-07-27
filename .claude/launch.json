@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "static",
-      "runtimeExecutable": "C:\\Users\\Editor\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "runtimeExecutable": "C:\\Program Files\\Python313\\python.exe",
       "runtimeArgs": ["-m", "http.server", "8137"],
       "port": 8137
     }
