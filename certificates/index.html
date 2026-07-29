@@ -135,7 +135,7 @@
   <div class="status" id="status"></div>
   <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.<br>
     💡 תמונה יוצאת חתוכה? <b>גררו אותה עם העכבר</b> כדי להזיז, ו<b>גלגלת העכבר</b> כדי להגדיל/להקטין. דאבל-קליק = איפוס. המיקום והזום נשמרים גם בהדפסה.
-    <span style="float:left;color:#c7b6e6">גרסה 2026-07-26 · v7</span></div>
+    <span style="float:left;color:#c7b6e6">גרסה 2026-07-29 · v8</span></div>
 </div>
 
 <div id="sheets"></div>
@@ -208,10 +208,11 @@
     const clSign=document.createElement('p'); clSign.className='cl-sign';
     clSign.textContent='בהצלחה בכיתה א\' – אנחנו מאמינים בך!'; letter.appendChild(clSign);
     cover.appendChild(letter);
-    if(rec.employeeId){
+    const idVal = rec.makat || rec.employeeId;   // מעדיף מק"ט; אם אין — מס' עובד
+    if(idVal){
       const emp=document.createElement('div'); emp.className='empno';
-      emp.appendChild(document.createTextNode('מספר עובד'));
-      const eb=document.createElement('b'); eb.textContent=rec.employeeId; emp.appendChild(eb);
+      emp.appendChild(document.createTextNode(rec.makat ? 'מקט' : 'מספר עובד'));
+      const eb=document.createElement('b'); eb.textContent=idVal; emp.appendChild(eb);
       cover.appendChild(emp);
     }
     wrap.appendChild(cover);
@@ -305,6 +306,7 @@
       blessing:colIndex(headers,['ברכה']),
       photo:colIndex(headers,['תמונה','תמונת','photo']),
       employeeId:colIndex(headers,['מספר עובד','מס עובד','עובד','employee']),
+      makat:colIndex(headers,['מקט','מק"ט','makat']),
     };
     if(idx.fname<0){status.textContent='לא זוהתה עמודת "שם הילד/ה". בדקו את שורת הכותרות.';return;}
     let n=0;
@@ -318,6 +320,7 @@
         blessing:idx.blessing>-1?(row[idx.blessing]||'').trim():'',
         photo:idx.photo>-1?(row[idx.photo]||'').trim():'',
         employeeId:idx.employeeId>-1?(row[idx.employeeId]||'').replace(/^'/,'').trim():'',
+        makat:idx.makat>-1?(row[idx.makat]||'').replace(/^'/,'').trim():'',
       };
       if(!rec.fname && !rec.strengths && !rec.blessing) continue;
       rec.photoKey=normName(rec.fname+rec.lname);
@@ -359,8 +362,8 @@
 
   /* quick preview: add #demo to the URL to load one sample certificate */
   if(location.hash==='#demo'){
-    const d=['שם הילד/ה,שם משפחה,חוזקות,ברכה אישית,חלומות,תמונה,מספר עובד',
-      '"דקלה","לוי","סקרנית · אמיצה · יצירתית","אנחנו מאחלים לך שנה ראשונה מלאה בחברויות, צחוקים והמון גילויים!","דקלה חולמת להיות רופאה ולעזור לאנשים",,"77345"'].join('\n');
+    const d=['שם הילד/ה,שם משפחה,חוזקות,ברכה אישית,חלומות,תמונה,מספר עובד,מקט',
+      '"דקלה","לוי","סקרנית · אמיצה · יצירתית","אנחנו מאחלים לך שנה ראשונה מלאה בחברויות, צחוקים והמון גילויים!","דקלה חולמת להיות רופאה ולעזור לאנשים",,"","93640"'].join('\n');
     $('#csvText').value=d; render(parseCSV(d));
   }
 })();
