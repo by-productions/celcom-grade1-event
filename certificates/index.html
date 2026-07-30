@@ -91,20 +91,14 @@
     box-shadow:0 7px 13px -4px rgba(74,30,140,.5),inset 0 3px 0 rgba(255,255,255,.22),inset 0 -3px 0 rgba(0,0,0,.12);
     text-shadow:0 2px 3px rgba(58,10,90,.4)}
 
-  /* left-page content sections (header + text + colored dashed underline) */
-  .sec{position:absolute;z-index:2;right:60.3%;width:27.6%;direction:rtl;text-align:right}
-  .sec1{top:25.5%}.sec2{top:43.5%}.sec3{top:61.5%}
-  .h{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;font-weight:700;font-size:2.15cqw;margin:0 0 .35em}
+  /* left-page content column — sections flow one after another, size auto-fits to fill the page */
+  .secs{position:absolute;z-index:2;right:60.3%;width:27.6%;top:23.5%;height:55%;
+    direction:rtl;text-align:right;display:flex;flex-direction:column;justify-content:center;
+    gap:1.05em;overflow:hidden}
+  .h{font-family:'Varela Round','Fredoka','Assistant','Segoe UI',Arial,sans-serif;
+    font-weight:700;font-size:1.38em;line-height:1.15;margin:0 0 .3em}
   .h1{color:var(--pink)}.h2{color:var(--purple)}.h3{color:var(--pink)}
-  .b{font-size:1.55cqw;color:var(--body);line-height:1.5;max-height:8cqw;overflow:hidden}
-  /* dashed writing-lines under each text (like the first version) */
-  .ulines{margin-top:.7em}
-  .ulines i{display:block;height:.16cqw;margin-bottom:.75em;border-radius:2px;
-    background:repeating-linear-gradient(90deg,currentColor 0 .95cqw,transparent .95cqw 1.6cqw)}
-  .ulines i:last-child{margin-bottom:0}
-  .u1 i:nth-child(1){color:#FF1B9C}.u1 i:nth-child(2){color:#8B3FF0}
-  .u2 i:nth-child(1){color:#8B3FF0}.u2 i:nth-child(2){color:#FF4DB4}
-  .u3 i:nth-child(1){color:#FF1B9C}.u3 i:nth-child(2){color:#6322D6}
+  .b{font-size:1em;color:var(--body);line-height:1.5}
 
   /* employee number — middle chip of the back-cover strip (between תשפ"ו and "עם המון אהבה") */
   .empno{position:absolute;z-index:2;left:19.4%;width:14.2%;top:83%;text-align:center;
@@ -135,7 +129,7 @@
   <div class="status" id="status"></div>
   <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.<br>
     💡 תמונה יוצאת חתוכה? <b>גררו אותה עם העכבר</b> כדי להזיז, ו<b>גלגלת העכבר</b> כדי להגדיל/להקטין. דאבל-קליק = איפוס. המיקום והזום נשמרים גם בהדפסה.
-    <span style="float:left;color:#c7b6e6">גרסה 2026-07-30 · v10</span></div>
+    <span style="float:left;color:#c7b6e6">גרסה 2026-07-30 · v11</span></div>
 </div>
 
 <div id="sheets"></div>
@@ -235,9 +229,11 @@
     inside.appendChild(frame);
 
     inside.appendChild(bannerEl('על '+name));
-    inside.appendChild(section('sec1','h1','u1','החוזקות של '+name, rec.strengths));
-    inside.appendChild(section('sec2','h2','u2','החלומות של '+name, rec.dreams));
-    inside.appendChild(section('sec3','h3','u3','הברכה שלנו', rec.blessing));
+    const secs=document.createElement('div'); secs.className='secs';
+    secs.appendChild(section('h1','החוזקות של '+name, rec.strengths));
+    secs.appendChild(section('h2','החלומות של '+name, rec.dreams));
+    secs.appendChild(section('h3','הברכה שלנו', rec.blessing));
+    inside.appendChild(secs);
 
     wrap.appendChild(inside);
     return wrap;
@@ -270,8 +266,8 @@
     const b=document.createElement('div'); b.className='nb'; b.textContent=text;
     w.appendChild(b); return w;
   }
-  function section(secCls,hCls,uCls,head,body){
-    const s=document.createElement('div'); s.className='sec '+secCls;
+  function section(hCls,head,body){
+    const s=document.createElement('div'); s.className='sec';
     const h=document.createElement('div'); h.className='h '+hCls; h.textContent=head;
     const b=document.createElement('div'); b.className='b'; b.textContent=body||'';
     s.appendChild(h); s.appendChild(b); return s;   // ללא קווי כתיבה מקווקווים
@@ -279,13 +275,24 @@
 
   /* ---------- shrink body text to fit its box (also before printing) ---------- */
   function autofit(){
-    document.querySelectorAll('.b,.coverletter').forEach(el=>{
+    // מכתב הגב — כיווץ בלבד כדי להיכנס לתיבה
+    document.querySelectorAll('.coverletter').forEach(el=>{
       el.style.fontSize='';                 // reset to responsive CSS size
       let fs=parseFloat(getComputedStyle(el).fontSize);
       let guard=0;
       while(el.scrollHeight>el.clientHeight+1 && fs>7 && guard<90){
         fs-=0.5; el.style.fontSize=fs+'px'; guard++;
       }
+    });
+    // עמוד פנימי — גודל פונט אחיד לכל הקטעים, גדל/מתכווץ כדי למלא את העמוד
+    document.querySelectorAll('.secs').forEach(box=>{
+      const H=box.clientHeight; if(!H) return;
+      let lo=6, hi=40, best=6;              // חיפוש בינארי על גודל הבסיס (px)
+      for(let i=0;i<24;i++){
+        const mid=(lo+hi)/2; box.style.fontSize=mid+'px';
+        if(box.scrollHeight<=H+1){ best=mid; lo=mid; } else { hi=mid; }
+      }
+      box.style.fontSize=best+'px';
     });
   }
   window.addEventListener('beforeprint',autofit);
