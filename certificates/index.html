@@ -135,7 +135,7 @@
   <div class="status" id="status"></div>
   <div class="hint">עמודות מזוהות אוטומטית לפי הכותרות: שם הילד/ה · חוזקות · חלומות · ברכה אישית · תמונה.<br>
     💡 תמונה יוצאת חתוכה? <b>גררו אותה עם העכבר</b> כדי להזיז, ו<b>גלגלת העכבר</b> כדי להגדיל/להקטין. דאבל-קליק = איפוס. המיקום והזום נשמרים גם בהדפסה.
-    <span style="float:left;color:#c7b6e6">גרסה 2026-07-30 · v9</span></div>
+    <span style="float:left;color:#c7b6e6">גרסה 2026-07-30 · v10</span></div>
 </div>
 
 <div id="sheets"></div>
@@ -274,9 +274,7 @@
     const s=document.createElement('div'); s.className='sec '+secCls;
     const h=document.createElement('div'); h.className='h '+hCls; h.textContent=head;
     const b=document.createElement('div'); b.className='b'; b.textContent=body||'';
-    const u=document.createElement('div'); u.className='ulines '+uCls;
-    u.appendChild(document.createElement('i')); u.appendChild(document.createElement('i'));
-    s.appendChild(h); s.appendChild(b); s.appendChild(u); return s;
+    s.appendChild(h); s.appendChild(b); return s;   // ללא קווי כתיבה מקווקווים
   }
 
   /* ---------- shrink body text to fit its box (also before printing) ---------- */
